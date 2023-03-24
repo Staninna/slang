@@ -5,7 +5,7 @@ pub struct Buffer {
 impl Buffer {
     pub fn new(size: usize) -> Buffer {
         Buffer {
-            data: vec![0xFF; size],
+            data: vec![0x00; size],
         }
     }
 }
