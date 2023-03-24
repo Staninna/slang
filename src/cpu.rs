@@ -1,7 +1,10 @@
-use crate::devices::{
-    device::{Device64Bit, Device8Bit},
-    ram::Ram,
-    registers::Registers,
+use crate::{
+    devices::{
+        device::{Device64Bit, Device8Bit},
+        ram::Ram,
+        registers::Registers,
+    },
+    opcodes::{AddrMode, Instruction, Opcode, Operand},
 };
 use hashbrown::HashMap;
 
@@ -47,7 +50,7 @@ impl Cpu {
     }
 
     pub fn run(&mut self) {
-        self.fetch8();
+        self.fetch();
     }
 }
 
@@ -90,5 +93,49 @@ impl Cpu {
         let data = self.ram.read64(ip);
         self.write_reg("ip", ip + 8);
         data
+    }
+
+    // Fetch instruction
+    fn fetch(&mut self) -> Instruction {
+        // Fetch the opcode and address mode
+        let opcode = Opcode::from(self.fetch8());
+        let addr_mode = AddrMode::from(self.fetch8());
+
+        // Match the address mode and get the operands
+        let (src, dst) = match addr_mode {
+            AddrMode::RegToReg => {
+                let src_reg = self.fetch8();
+                let dst_reg = self.fetch8();
+                (Operand::Reg(src_reg), Operand::Reg(dst_reg))
+            }
+            AddrMode::RegToMem => {
+                let src_reg = self.fetch8();
+                let dst_mem_addr = self.fetch64();
+                (Operand::Reg(src_reg), Operand::Mem(dst_mem_addr))
+            }
+            AddrMode::ImmToReg => {
+                let src_imm = self.fetch64();
+                let dst_reg = self.fetch8();
+                (Operand::Imm(src_imm), Operand::Reg(dst_reg))
+            }
+            AddrMode::ImmToMem => {
+                let src_imm = self.fetch64();
+                let dst_mem_addr = self.fetch64();
+                (Operand::Imm(src_imm), Operand::Mem(dst_mem_addr))
+            }
+            AddrMode::MemToReg => {
+                let src_mem_addr = self.fetch64();
+                let dst_reg = self.fetch8();
+                (Operand::Mem(src_mem_addr), Operand::Reg(dst_reg))
+            }
+            AddrMode::MemToMem => {
+                let src_mem_addr = self.fetch64();
+                let dst_mem_addr = self.fetch64();
+                (Operand::Mem(src_mem_addr), Operand::Mem(dst_mem_addr))
+            }
+        };
+
+        // Return the fetched instruction
+        Instruction::new(opcode, addr_mode, src, dst)
     }
 }
