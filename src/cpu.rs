@@ -103,6 +103,7 @@ impl Cpu {
 
         // Match the address mode and get the operands
         let (src, dst) = match addr_mode {
+            AddrMode::None => (Operand::None, Operand::None),
             AddrMode::RegToReg => {
                 let src_reg = self.fetch8();
                 let dst_reg = self.fetch8();
