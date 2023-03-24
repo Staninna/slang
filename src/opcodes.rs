@@ -12,7 +12,7 @@ impl From<u8> for Opcode {
             0x01 => Opcode::Mov,
             0x02 => Opcode::Lod,
             0x03 => Opcode::Str,
-            _ => panic!("Invalid opcode: {}", opcode),
+            _ => panic!("Invalid opcode: {0:#x}", opcode),
         }
     }
 }
@@ -37,7 +37,7 @@ impl From<u8> for AddrMode {
             0x40 => AddrMode::ImmToMem,
             0x50 => AddrMode::MemToReg,
             0x60 => AddrMode::MemToMem,
-            _ => panic!("Invalid address mode: {}", addr_mode),
+            _ => panic!("Invalid address mode: {0:#x}", addr_mode),
         }
     }
 }

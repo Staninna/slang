@@ -15,7 +15,7 @@ impl Registers {
 impl Device64Bit for Registers {
     fn read(&self, addr: u64) -> u64 {
         if !self.check_addr(addr) {
-            panic!("Invalid address: {}", addr)
+            panic!("Invalid address: {0:#x}", addr)
         }
 
         let mut data: u64 = 0;
@@ -28,7 +28,7 @@ impl Device64Bit for Registers {
 
     fn write(&mut self, addr: u64, data: u64) {
         if !self.check_addr(addr) {
-            panic!("Invalid address: {}", addr)
+            panic!("Invalid address: {0:#x}", addr)
         }
 
         for i in 0..std::mem::size_of::<u64>() {

@@ -13,7 +13,7 @@ impl Ram {
 
     pub fn read64(&self, addr: u64) -> u64 {
         if !self.check_addr(addr) {
-            panic!("Invalid address: {}", addr)
+            panic!("Invalid address: {0:#x}", addr);
         }
 
         let mut data: u64 = 0;
@@ -26,7 +26,7 @@ impl Ram {
 
     pub fn write64(&mut self, addr: u64, data: u64) {
         if !self.check_addr(addr) {
-            panic!("Invalid address: {}", addr)
+            panic!("Invalid address: {0:#x}", addr);
         }
 
         for i in 0..std::mem::size_of::<u64>() {
@@ -39,7 +39,7 @@ impl Ram {
 impl Device8Bit for Ram {
     fn read(&self, addr: u64) -> u8 {
         if !self.check_addr(addr) {
-            panic!("Invalid address: {}", addr)
+            panic!("Invalid address: {0:#x}", addr);
         }
 
         self.buffer.data[addr as usize]
@@ -47,7 +47,7 @@ impl Device8Bit for Ram {
 
     fn write(&mut self, addr: u64, data: u8) {
         if !self.check_addr(addr) {
-            panic!("Invalid address: {}", addr)
+            panic!("Invalid address: {0:#x}", addr);
         }
 
         self.buffer.data[addr as usize] = data;
