@@ -3,8 +3,8 @@ pub struct Buffer {
 }
 
 impl Buffer {
-    pub fn new(size: usize) -> Buffer {
-        Buffer {
+    pub fn new(size: usize) -> Self {
+        Self {
             data: vec![0x00; size],
         }
     }
