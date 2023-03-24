@@ -102,7 +102,7 @@ impl Cpu {
         let addr_mode = AddrMode::from(self.fetch8());
 
         // Match the address mode and get the operands
-        let (src, dst) = match addr_mode {
+        let (operand_one, operand_two) = match addr_mode {
             AddrMode::None => (Operand::None, Operand::None),
             AddrMode::RegToReg => {
                 let src_reg = self.fetch8();
@@ -137,6 +137,6 @@ impl Cpu {
         };
 
         // Return the fetched instruction
-        Instruction::new(opcode, addr_mode, src, dst)
+        Instruction::new(opcode, addr_mode, operand_one, operand_two)
     }
 }
