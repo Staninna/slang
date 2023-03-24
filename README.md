@@ -16,16 +16,16 @@ Here's a table of the Slang VM registers:
 
 | Register | Description         | Size   | Code | Initial Value |
 | -------- | ------------------- | ------ | ---- | ------------- |
-| ACC      | Accumulator         | 64-bit | 0x00 | 0x00          |
-| IP       | Instruction pointer | 64-bit | 0x01 | 0x00          |
-| R1       | Register 1          | 64-bit | 0x02 | 0x00          |
-| R2       | Register 2          | 64-bit | 0x03 | 0x00          |
-| R3       | Register 3          | 64-bit | 0x04 | 0x00          |
-| R4       | Register 4          | 64-bit | 0x05 | 0x00          |
-| R5       | Register 5          | 64-bit | 0x06 | 0x00          |
-| R6       | Register 6          | 64-bit | 0x07 | 0x00          |
-| R7       | Register 7          | 64-bit | 0x08 | 0x00          |
-| R8       | Register 8          | 64-bit | 0x09 | 0x00          |
+| ACC      | Accumulator         | 64-bit | 0x01 | 0x00          |
+| IP       | Instruction pointer | 64-bit | 0x02 | 0x00          |
+| R1       | Register 1          | 64-bit | 0x03 | 0x00          |
+| R2       | Register 2          | 64-bit | 0x04 | 0x00          |
+| R3       | Register 3          | 64-bit | 0x05 | 0x00          |
+| R4       | Register 4          | 64-bit | 0x06 | 0x00          |
+| R5       | Register 5          | 64-bit | 0x07 | 0x00          |
+| R6       | Register 6          | 64-bit | 0x08 | 0x00          |
+| R7       | Register 7          | 64-bit | 0x09 | 0x00          |
+| R8       | Register 8          | 64-bit | 0x0A | 0x00          |
 
 ## Opcodes
 
@@ -42,32 +42,21 @@ The Slang VM supports the following opcodes (for now):
 
 The Slang VM supports the following addressing modes:
 
-| Mode | Description | Size  | Code |
-| ---- | ----------- | ----- | ---- |
-| REG  | Register    | 8-bit | 0x00 |
-| MEM  | Memory      | 8-bit | 0x01 |
-| IMM  | Immediate   | 8-bit | 0x02 |
+| Mode       | Description           | Size  | Code | Operand Sizes    |
+| ---------- | --------------------- | ----- | ---- | ---------------- |
+| REG -> REG | Register to register  | 8-bit | 0x01 | 8-bit -> 8-bit   |
+| REG -> MEM | Register to memory    | 8-bit | 0x02 | 8-bit -> 64-bit  |
+|            |                       |       |      |                  |
+| IMM -> REG | Immediate to register | 8-bit | 0x03 | 64-bit -> 8-bit  |
+| IMM -> MEM | Immediate to memory   | 8-bit | 0x04 | 64-bit -> 64-bit |
+|            |                       |       |      |                  |
+| MEM -> REG | Memory to register    | 8-bit | 0x05 | 64-bit -> 8-bit  |
+| MEM -> MEM | Memory to memory      | 8-bit | 0x06 | 64-bit -> 64-bit |
 
 ## Bytecode Format
 
 The format of the bytecode is as follows:
 
-| Opcode | Addressing Mode | Operand          |
-| ------ | --------------- | ---------------- |
-| 8-bit  | 8-bit           | 64-bit (8 bytes) |
-
-Some examples of bytecode:
-
-```asm
-; MOV R1, 0x123456789ABCDEF0
-0x01 0x00 0x123456789ABCDEF0
-
-; LOD R1, [R2]
-0x02 0x01 0x02 ; 0x02 is padded to 8 bytes
-
-; STR R1, [R2]
-0x03 0x01 0x02 ; 0x02 is padded to 8 bytes
-
-; STR R1, 0x123456789ABCDEF0
-0x03 0x02 0x123456789ABCDEF0
-```
+| Opcode | Addressing Mode | Operand                            | Operand                            |
+| ------ | --------------- | ---------------------------------- | ---------------------------------- |
+| 8-bit  | 8-bit           | 64-bit (8 bytes) OR 8-bit (1 byte) | 64-bit (8 bytes) OR 8-bit (1 byte) |
