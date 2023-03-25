@@ -59,6 +59,7 @@ impl Cpu {
         self.regs.write(addr, data);
     }
 
+    // Get the address of a register by name
     fn get_reg_addr(&self, name: &str) -> u64 {
         match self.regs_addr_map.get(name) {
             Some(addr) => *addr,
