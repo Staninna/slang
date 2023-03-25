@@ -1,6 +1,7 @@
 mod cpu;
 mod devices;
 mod opcodes;
+mod register;
 
 const MEM_SIZE: usize = 1024; // 1 KiB
 

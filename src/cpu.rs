@@ -2,9 +2,10 @@ use crate::{
     devices::{
         device::{Device64Bit, Device8Bit},
         ram::Ram,
-        registers::{Register, Registers},
+        registers::Registers,
     },
     opcodes::{AddrMode, Instruction, Opcode, Operand},
+    register::Register,
 };
 use hashbrown::HashMap;
 
