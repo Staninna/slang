@@ -137,6 +137,8 @@ impl Cpu {
         }
     }
 
+    // TODO: Order the `match operands` in this order: IMM->REG, IMM->MEM, REG->REG, REG->MEM, MEM->REG, MEM->MEM
+
     // Move data
     fn mov(&mut self, operands: (Operand, Operand)) {
         use Operand::*;

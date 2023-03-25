@@ -31,6 +31,8 @@ Here's a table of the Slang VM registers:
 
 The Slang VM supports the following opcodes (for now):
 
+<!-- TODO: Order Modes in this order: IMM->REG, IMM->MEM, REG->REG, REG->MEM, MEM->REG, MEM->MEM -->
+
 | Opcode | Description  | Size  | Code   | Modes                                                                  |
 | ------ | ------------ | ----- | ------ | ---------------------------------------------------------------------- |
 | `NOP`  | No operation | 8-bit | `0x00` | -                                                                      |
