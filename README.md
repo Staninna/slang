@@ -31,27 +31,27 @@ Here's a table of the Slang VM registers:
 
 The Slang VM supports the following opcodes (for now):
 
-| Opcode | Description  | Size  | Code | Modes         |
-| ------ | ------------ | ----- | ---- | ------------- |
-| NOP    | No operation | 8-bit | 0x00 | -             |
-| MOV    | Move         | 8-bit | 0x01 | REG, MEM, IMM |
-| LOD    | Load         | 8-bit | 0x02 | REG, MEM, IMM |
-| STR    | Store        | 8-bit | 0x03 | REG, MEM, IMM |
+| Opcode | Description  | Size  | Code | Modes                                                                  |
+| ------ | ------------ | ----- | ---- | ---------------------------------------------------------------------- |
+| NOP    | No operation | 8-bit | 0x00 | -                                                                      |
+| MOV    | Move         | 8-bit | 0x01 | `IMM->REG`, `IMM->MEM`, `REG->REG`, `REG->MEM`, `MEM->REG`, `MEM->MEM` |
+| LOD    | Load         | 8-bit | 0x02 | `MEM->REG`, `IMM->REG`                                                 |
+| STR    | Store        | 8-bit | 0x03 | `REG->MEM`, `IMM->MEM`, `MEM->MEM`                                     |
 
 ## Addressing Modes
 
 The Slang VM supports the following addressing modes:
 
-| Mode       | Description           | Size  | Code | Operand Sizes    |
-| ---------- | --------------------- | ----- | ---- | ---------------- |
-| REG -> REG | Register to register  | 8-bit | 0x10 | 8-bit -> 8-bit   |
-| REG -> MEM | Register to memory    | 8-bit | 0x20 | 8-bit -> 64-bit  |
-|            |                       |       |      |                  |
-| IMM -> REG | Immediate to register | 8-bit | 0x30 | 64-bit -> 8-bit  |
-| IMM -> MEM | Immediate to memory   | 8-bit | 0x40 | 64-bit -> 64-bit |
-|            |                       |       |      |                  |
-| MEM -> REG | Memory to register    | 8-bit | 0x50 | 64-bit -> 8-bit  |
-| MEM -> MEM | Memory to memory      | 8-bit | 0x60 | 64-bit -> 64-bit |
+| Mode     | Description           | Size  | Code | Operand Sizes  |
+| -------- | --------------------- | ----- | ---- | -------------- |
+| REG->REG | Register to register  | 8-bit | 0x10 | 8-bit->8-bit   |
+| REG->MEM | Register to memory    | 8-bit | 0x20 | 8-bit->64-bit  |
+|          |                       |       |      |                |
+| IMM->REG | Immediate to register | 8-bit | 0x30 | 64-bit->8-bit  |
+| IMM->MEM | Immediate to memory   | 8-bit | 0x40 | 64-bit->64-bit |
+|          |                       |       |      |                |
+| MEM->REG | Memory to register    | 8-bit | 0x50 | 64-bit->8-bit  |
+| MEM->MEM | Memory to memory      | 8-bit | 0x60 | 64-bit->64-bit |
 
 ## Bytecode Format
 
