@@ -102,14 +102,16 @@ impl Cpu {
 
     // Fetch operands
     fn fetch_operands(&mut self, addr_mode: &AddrMode) -> (Operand, Operand) {
+        use AddrMode::*;
+        use Operand::*;
         match addr_mode {
             AddrMode::None => (Operand::None, Operand::None),
-            AddrMode::RegToReg => (Operand::Reg(self.fetch8()), Operand::Reg(self.fetch8())),
-            AddrMode::RegToMem => (Operand::Reg(self.fetch8()), Operand::Mem(self.fetch64())),
-            AddrMode::ImmToReg => (Operand::Imm(self.fetch64()), Operand::Reg(self.fetch8())),
-            AddrMode::ImmToMem => (Operand::Imm(self.fetch64()), Operand::Mem(self.fetch64())),
-            AddrMode::MemToReg => (Operand::Mem(self.fetch64()), Operand::Reg(self.fetch8())),
-            AddrMode::MemToMem => (Operand::Mem(self.fetch64()), Operand::Mem(self.fetch64())),
+            RegToReg => (Reg(self.fetch8()), Reg(self.fetch8())),
+            RegToMem => (Reg(self.fetch8()), Mem(self.fetch64())),
+            ImmToReg => (Imm(self.fetch64()), Reg(self.fetch8())),
+            ImmToMem => (Imm(self.fetch64()), Mem(self.fetch64())),
+            MemToReg => (Mem(self.fetch64()), Reg(self.fetch8())),
+            MemToMem => (Mem(self.fetch64()), Mem(self.fetch64())),
         }
     }
 }
