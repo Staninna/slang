@@ -3,6 +3,10 @@ pub enum Opcode {
     Mov = 0x01,
     Lod = 0x02,
     Str = 0x03,
+    Add = 0x04,
+    Sub = 0x05,
+    Mul = 0x06,
+    Div = 0x07,
 }
 
 impl From<u8> for Opcode {
@@ -13,6 +17,10 @@ impl From<u8> for Opcode {
             0x01 => Mov,
             0x02 => Lod,
             0x03 => Str,
+            0x04 => Add,
+            0x05 => Sub,
+            0x06 => Mul,
+            0x07 => Div,
             _ => panic!("Invalid opcode: {0:#x}", opcode),
         }
     }

@@ -130,6 +130,10 @@ impl Cpu {
             Mov => self.mov(operands),
             Lod => self.lod(operands),
             Str => self.str(operands),
+            Add => todo!(),
+            Sub => todo!(),
+            Mul => todo!(),
+            Div => todo!(),
         }
     }
 
