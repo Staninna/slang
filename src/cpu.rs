@@ -137,7 +137,13 @@ impl Cpu {
         }
     }
 
-    // TODO: Order the `match operands` in this order: IMM->REG, IMM->MEM, REG->REG, REG->MEM, MEM->REG, MEM->MEM
+    // Order the `match operands` in this order:
+    // 1. IMM->REG
+    // 2. IMM->MEM
+    // 3. REG->REG
+    // 4. REG->MEM
+    // 5. MEM->REG
+    // 6. MEM->MEM
 
     // Move data
     fn mov(&mut self, operands: (Operand, Operand)) {
@@ -184,16 +190,16 @@ impl Cpu {
     fn lod(&mut self, operands: (Operand, Operand)) {
         use Operand::*;
         match operands {
+            // Imm -> Reg
+            (Imm(imm), Reg(reg)) => {
+                let reg = self.index_reg(reg);
+                self.write_reg(reg, imm);
+            }
             // Mem -> Reg
             (Mem(mem), Reg(reg)) => {
                 let reg = self.index_reg(reg);
                 let data = self.ram.read64(mem);
                 self.write_reg(reg, data);
-            }
-            // Imm -> Reg
-            (Imm(imm), Reg(reg)) => {
-                let reg = self.index_reg(reg);
-                self.write_reg(reg, imm);
             }
             _ => panic!("Invalid operands for lod instruction"),
         }
@@ -203,15 +209,15 @@ impl Cpu {
     fn str(&mut self, operands: (Operand, Operand)) {
         use Operand::*;
         match operands {
+            // Imm -> Mem
+            (Imm(imm), Mem(mem)) => {
+                self.ram.write64(mem, imm);
+            }
             // Reg -> Mem
             (Reg(reg), Mem(mem)) => {
                 let reg = self.index_reg(reg);
                 let data = self.read_reg(reg);
                 self.ram.write64(mem, data);
-            }
-            // Imm -> Mem
-            (Imm(imm), Mem(mem)) => {
-                self.ram.write64(mem, imm);
             }
             // Mem -> Mem
             (Mem(mem), Mem(mem2)) => {
