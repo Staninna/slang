@@ -131,9 +131,9 @@ impl Cpu {
             Lod => self.lod(operands),
             Str => self.str(operands),
             Add => self.add(operands),
-            Sub => todo!(),
-            Mul => todo!(),
-            Div => todo!(),
+            Sub => self.sub(operands),
+            Mul => self.mul(operands),
+            Div => self.div(operands),
         }
     }
 
@@ -249,6 +249,96 @@ impl Cpu {
                 self.write_reg(Acc, data + data2);
             }
             _ => panic!("Invalid operands for add instruction"),
+        }
+    }
+
+    // Subtract data
+    fn sub(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Imm -> Reg
+            (Imm(imm), Reg(reg)) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                self.write_reg(Acc, data - imm);
+            }
+            // Reg -> Reg
+            (Reg(reg), Reg(reg2)) => {
+                let reg1 = self.index_reg(reg);
+                let reg2 = self.index_reg(reg2);
+                let data = self.read_reg(reg1);
+                let data2 = self.read_reg(reg2);
+                self.write_reg(Acc, data - data2);
+            }
+            // Mem -> Reg
+            (Mem(mem), Reg(reg)) => {
+                let reg = self.index_reg(reg);
+                let data = self.ram.read64(mem);
+                let data2 = self.read_reg(reg);
+                self.write_reg(Acc, data - data2);
+            }
+            _ => panic!("Invalid operands for sub instruction"),
+        }
+    }
+
+    // Multiply data
+    fn mul(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Imm -> Reg
+            (Imm(imm), Reg(reg)) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                self.write_reg(Acc, data * imm);
+            }
+            // Reg -> Reg
+            (Reg(reg), Reg(reg2)) => {
+                let reg1 = self.index_reg(reg);
+                let reg2 = self.index_reg(reg2);
+                let data = self.read_reg(reg1);
+                let data2 = self.read_reg(reg2);
+                self.write_reg(Acc, data * data2);
+            }
+            // Mem -> Reg
+            (Mem(mem), Reg(reg)) => {
+                let reg = self.index_reg(reg);
+                let data = self.ram.read64(mem);
+                let data2 = self.read_reg(reg);
+                self.write_reg(Acc, data * data2);
+            }
+            _ => panic!("Invalid operands for mul instruction"),
+        }
+    }
+
+    // Divide data
+    fn div(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Imm -> Reg
+            (Imm(imm), Reg(reg)) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                self.write_reg(Acc, data / imm);
+            }
+            // Reg -> Reg
+            (Reg(reg), Reg(reg2)) => {
+                let reg1 = self.index_reg(reg);
+                let reg2 = self.index_reg(reg2);
+                let data = self.read_reg(reg1);
+                let data2 = self.read_reg(reg2);
+                self.write_reg(Acc, data / data2);
+            }
+            // Mem -> Reg
+            (Mem(mem), Reg(reg)) => {
+                let reg = self.index_reg(reg);
+                let data = self.ram.read64(mem);
+                let data2 = self.read_reg(reg);
+                self.write_reg(Acc, data / data2);
+            }
+            _ => panic!("Invalid operands for div instruction"),
         }
     }
 }
