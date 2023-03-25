@@ -13,7 +13,6 @@ pub enum Register {
 }
 
 impl Register {
-    // return a vector of all the registers dynamically so if we add more registers we don't have to change this
     pub fn all() -> Vec<Register> {
         vec![
             Register::Acc,
