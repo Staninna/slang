@@ -128,11 +128,12 @@ impl Cpu {
         match opcode {
             Nop => {}
             Mov => self.mov(operands),
-            Lod => todo!(),
+            Lod => self.lod(operands),
             Str => todo!(),
         }
     }
 
+    // Move data
     fn mov(&mut self, operands: (Operand, Operand)) {
         use Operand::*;
         match operands {
@@ -170,6 +171,25 @@ impl Cpu {
                 self.ram.write64(mem2, data);
             }
             _ => panic!("Invalid operands for mov instruction"),
+        }
+    }
+
+    // Load data from memory to a register
+    fn lod(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        match operands {
+            // Mem -> Reg
+            (Mem(mem), Reg(reg)) => {
+                let reg = self.index_reg(reg);
+                let data = self.ram.read64(mem);
+                self.write_reg(reg, data);
+            }
+            // Imm -> Reg
+            (Imm(imm), Reg(reg)) => {
+                let reg = self.index_reg(reg);
+                self.write_reg(reg, imm);
+            }
+            _ => panic!("Invalid operands for lod instruction"),
         }
     }
 }
