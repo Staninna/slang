@@ -12,7 +12,7 @@ pub struct Cpu {
     regs: Registers,
     regs_maps: HashMap<String, u64>,
     reg_names: Vec<String>,
-    ram: Ram,
+    ram: Ram, // TODO: Replace this with a device mapper that can map devices to memory addresses ranges and allow for multiple devices to be mapped
 }
 
 // public methods
@@ -104,36 +104,12 @@ impl Cpu {
         // Match the address mode and get the operands
         let (operand_one, operand_two) = match addr_mode {
             AddrMode::None => (Operand::None, Operand::None),
-            AddrMode::RegToReg => {
-                let src_reg = self.fetch8();
-                let dst_reg = self.fetch8();
-                (Operand::Reg(src_reg), Operand::Reg(dst_reg))
-            }
-            AddrMode::RegToMem => {
-                let src_reg = self.fetch8();
-                let dst_mem_addr = self.fetch64();
-                (Operand::Reg(src_reg), Operand::Mem(dst_mem_addr))
-            }
-            AddrMode::ImmToReg => {
-                let src_imm = self.fetch64();
-                let dst_reg = self.fetch8();
-                (Operand::Imm(src_imm), Operand::Reg(dst_reg))
-            }
-            AddrMode::ImmToMem => {
-                let src_imm = self.fetch64();
-                let dst_mem_addr = self.fetch64();
-                (Operand::Imm(src_imm), Operand::Mem(dst_mem_addr))
-            }
-            AddrMode::MemToReg => {
-                let src_mem_addr = self.fetch64();
-                let dst_reg = self.fetch8();
-                (Operand::Mem(src_mem_addr), Operand::Reg(dst_reg))
-            }
-            AddrMode::MemToMem => {
-                let src_mem_addr = self.fetch64();
-                let dst_mem_addr = self.fetch64();
-                (Operand::Mem(src_mem_addr), Operand::Mem(dst_mem_addr))
-            }
+            AddrMode::RegToReg => (Operand::Reg(self.fetch8()), Operand::Reg(self.fetch8())),
+            AddrMode::RegToMem => (Operand::Reg(self.fetch8()), Operand::Mem(self.fetch64())),
+            AddrMode::ImmToReg => (Operand::Imm(self.fetch64()), Operand::Reg(self.fetch8())),
+            AddrMode::ImmToMem => (Operand::Imm(self.fetch64()), Operand::Mem(self.fetch64())),
+            AddrMode::MemToReg => (Operand::Mem(self.fetch64()), Operand::Reg(self.fetch8())),
+            AddrMode::MemToMem => (Operand::Mem(self.fetch64()), Operand::Mem(self.fetch64())),
         };
 
         // Return the fetched instruction
