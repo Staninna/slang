@@ -94,7 +94,15 @@ impl Cpu {
         let addr_mode = AddrMode::from(self.fetch8());
 
         // Match the address mode and get the operands
-        let (operand_one, operand_two) = match addr_mode {
+        let operands = self.fetch_operands(&addr_mode);
+
+        // Return the fetched instruction
+        Instruction::new(opcode, addr_mode, operands)
+    }
+
+    // Fetch operands
+    fn fetch_operands(&mut self, addr_mode: &AddrMode) -> (Operand, Operand) {
+        match addr_mode {
             AddrMode::None => (Operand::None, Operand::None),
             AddrMode::RegToReg => (Operand::Reg(self.fetch8()), Operand::Reg(self.fetch8())),
             AddrMode::RegToMem => (Operand::Reg(self.fetch8()), Operand::Mem(self.fetch64())),
@@ -102,9 +110,6 @@ impl Cpu {
             AddrMode::ImmToMem => (Operand::Imm(self.fetch64()), Operand::Mem(self.fetch64())),
             AddrMode::MemToReg => (Operand::Mem(self.fetch64()), Operand::Reg(self.fetch8())),
             AddrMode::MemToMem => (Operand::Mem(self.fetch64()), Operand::Mem(self.fetch64())),
-        };
-
-        // Return the fetched instruction
-        Instruction::new(opcode, addr_mode, operand_one, operand_two)
+        }
     }
 }

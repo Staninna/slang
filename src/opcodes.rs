@@ -52,17 +52,17 @@ pub enum Operand {
 pub struct Instruction {
     opcode: Opcode,
     addr_mode: AddrMode,
-    src: Operand,
-    dst: Operand,
+    operand_one: Operand,
+    operand_two: Operand,
 }
 
 impl Instruction {
-    pub fn new(opcode: Opcode, addr_mode: AddrMode, src: Operand, dst: Operand) -> Self {
+    pub fn new(opcode: Opcode, addr_mode: AddrMode, operands: (Operand, Operand)) -> Self {
         Self {
             opcode,
             addr_mode,
-            src,
-            dst,
+            operand_one: operands.0,
+            operand_two: operands.1,
         }
     }
 }
