@@ -130,7 +130,7 @@ impl Cpu {
             Mov => self.mov(operands),
             Lod => self.lod(operands),
             Str => self.str(operands),
-            Add => todo!(),
+            Add => self.add(operands),
             Sub => todo!(),
             Mul => todo!(),
             Div => todo!(),
@@ -219,6 +219,36 @@ impl Cpu {
                 self.ram.write64(mem2, data);
             }
             _ => panic!("Invalid operands for str instruction"),
+        }
+    }
+
+    // Add data
+    fn add(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Imm -> Reg
+            (Imm(imm), Reg(reg)) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                self.write_reg(Acc, data + imm);
+            }
+            // Reg -> Reg
+            (Reg(reg), Reg(reg2)) => {
+                let reg1 = self.index_reg(reg);
+                let reg2 = self.index_reg(reg2);
+                let data = self.read_reg(reg1);
+                let data2 = self.read_reg(reg2);
+                self.write_reg(Acc, data + data2);
+            }
+            // Mem -> Reg
+            (Mem(mem), Reg(reg)) => {
+                let reg = self.index_reg(reg);
+                let data = self.ram.read64(mem);
+                let data2 = self.read_reg(reg);
+                self.write_reg(Acc, data + data2);
+            }
+            _ => panic!("Invalid operands for add instruction"),
         }
     }
 }
