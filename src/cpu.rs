@@ -129,7 +129,7 @@ impl Cpu {
             Nop => {}
             Mov => self.mov(operands),
             Lod => self.lod(operands),
-            Str => todo!(),
+            Str => self.str(operands),
         }
     }
 
@@ -174,7 +174,7 @@ impl Cpu {
         }
     }
 
-    // Load data from memory to a register
+    // Load data
     fn lod(&mut self, operands: (Operand, Operand)) {
         use Operand::*;
         match operands {
@@ -190,6 +190,29 @@ impl Cpu {
                 self.write_reg(reg, imm);
             }
             _ => panic!("Invalid operands for lod instruction"),
+        }
+    }
+
+    // Store data
+    fn str(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        match operands {
+            // Reg -> Mem
+            (Reg(reg), Mem(mem)) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                self.ram.write64(mem, data);
+            }
+            // Imm -> Mem
+            (Imm(imm), Mem(mem)) => {
+                self.ram.write64(mem, imm);
+            }
+            // Mem -> Mem
+            (Mem(mem), Mem(mem2)) => {
+                let data = self.ram.read64(mem);
+                self.ram.write64(mem2, data);
+            }
+            _ => panic!("Invalid operands for str instruction"),
         }
     }
 }
