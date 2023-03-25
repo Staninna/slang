@@ -14,44 +14,44 @@ The Slang VM has ten registers, including eight general-purpose registers, one a
 
 Here's a table of the Slang VM registers:
 
-| Register | Description         | Size   | Code | Initial Value |
-| -------- | ------------------- | ------ | ---- | ------------- |
-| ACC      | Accumulator         | 64-bit | 0x01 | 0x00          |
-| IP       | Instruction pointer | 64-bit | 0x02 | 0x00          |
-| R1       | Register 1          | 64-bit | 0x03 | 0x00          |
-| R2       | Register 2          | 64-bit | 0x04 | 0x00          |
-| R3       | Register 3          | 64-bit | 0x05 | 0x00          |
-| R4       | Register 4          | 64-bit | 0x06 | 0x00          |
-| R5       | Register 5          | 64-bit | 0x07 | 0x00          |
-| R6       | Register 6          | 64-bit | 0x08 | 0x00          |
-| R7       | Register 7          | 64-bit | 0x09 | 0x00          |
-| R8       | Register 8          | 64-bit | 0x0A | 0x00          |
+| Register | Description         | Size   | Code   | Initial Value |
+| -------- | ------------------- | ------ | ------ | ------------- |
+| `ACC`    | Accumulator         | 64-bit | `0x01` | `0x00`        |
+| `IP`     | Instruction pointer | 64-bit | `0x02` | `0x00`        |
+| `R1`     | Register 1          | 64-bit | `0x03` | `0x00`        |
+| `R2`     | Register 2          | 64-bit | `0x04` | `0x00`        |
+| `R3`     | Register 3          | 64-bit | `0x05` | `0x00`        |
+| `R4`     | Register 4          | 64-bit | `0x06` | `0x00`        |
+| `R5`     | Register 5          | 64-bit | `0x07` | `0x00`        |
+| `R6`     | Register 6          | 64-bit | `0x08` | `0x00`        |
+| `R7`     | Register 7          | 64-bit | `0x09` | `0x00`        |
+| `R8`     | Register 8          | 64-bit | `0x0A` | `0x00`        |
 
 ## Opcodes
 
 The Slang VM supports the following opcodes (for now):
 
-| Opcode | Description  | Size  | Code | Modes                                                                  |
-| ------ | ------------ | ----- | ---- | ---------------------------------------------------------------------- |
-| NOP    | No operation | 8-bit | 0x00 | -                                                                      |
-| MOV    | Move         | 8-bit | 0x01 | `IMM->REG`, `IMM->MEM`, `REG->REG`, `REG->MEM`, `MEM->REG`, `MEM->MEM` |
-| LOD    | Load         | 8-bit | 0x02 | `MEM->REG`, `IMM->REG`                                                 |
-| STR    | Store        | 8-bit | 0x03 | `REG->MEM`, `IMM->MEM`, `MEM->MEM`                                     |
+| Opcode | Description  | Size  | Code   | Modes                                                                  |
+| ------ | ------------ | ----- | ------ | ---------------------------------------------------------------------- |
+| `NOP`  | No operation | 8-bit | `0x00` | -                                                                      |
+| `MOV`  | Move         | 8-bit | `0x01` | `IMM->REG`, `IMM->MEM`, `REG->REG`, `REG->MEM`, `MEM->REG`, `MEM->MEM` |
+| `LOD`  | Load         | 8-bit | `0x02` | `MEM->REG`, `IMM->REG`                                                 |
+| `STR`  | Store        | 8-bit | `0x03` | `REG->MEM`, `IMM->MEM`, `MEM->MEM`                                     |
 
 ## Addressing Modes
 
 The Slang VM supports the following addressing modes:
 
-| Mode     | Description           | Size  | Code | Operand Sizes  |
-| -------- | --------------------- | ----- | ---- | -------------- |
-| REG->REG | Register to register  | 8-bit | 0x10 | 8-bit->8-bit   |
-| REG->MEM | Register to memory    | 8-bit | 0x20 | 8-bit->64-bit  |
-|          |                       |       |      |                |
-| IMM->REG | Immediate to register | 8-bit | 0x30 | 64-bit->8-bit  |
-| IMM->MEM | Immediate to memory   | 8-bit | 0x40 | 64-bit->64-bit |
-|          |                       |       |      |                |
-| MEM->REG | Memory to register    | 8-bit | 0x50 | 64-bit->8-bit  |
-| MEM->MEM | Memory to memory      | 8-bit | 0x60 | 64-bit->64-bit |
+| Mode       | Description           | Size  | Code   | Operand Sizes    |
+| ---------- | --------------------- | ----- | ------ | ---------------- |
+| `REG->REG` | Register to register  | 8-bit | `0x10` | 8-bit -> 8-bit   |
+| `REG->MEM` | Register to memory    | 8-bit | `0x20` | 8-bit -> 64-bit  |
+|            |                       |       |        |                  |
+| `IMM->REG` | Immediate to register | 8-bit | `0x30` | 64-bit -> 8-bit  |
+| `IMM->MEM` | Immediate to memory   | 8-bit | `0x40` | 64-bit -> 64-bit |
+|            |                       |       |        |                  |
+| `MEM->REG` | Memory to register    | 8-bit | `0x50` | 64-bit -> 8-bit  |
+| `MEM->MEM` | Memory to memory      | 8-bit | `0x60` | 64-bit -> 64-bit |
 
 ## Bytecode Format
 
