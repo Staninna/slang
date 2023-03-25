@@ -2,7 +2,7 @@ use crate::{
     devices::{
         device::{Device64Bit, Device8Bit},
         ram::Ram,
-        registers::Registers,
+        registers::{Register, Registers},
     },
     opcodes::{AddrMode, Instruction, Opcode, Operand},
 };
@@ -11,25 +11,15 @@ use hashbrown::HashMap;
 pub struct Cpu {
     regs: Registers,
     regs_maps: HashMap<String, u64>,
-    reg_names: Vec<String>,
-    ram: Ram, // TODO: Replace this with a device mapper that can map devices to memory addresses ranges and allow for multiple devices to be mapped
+    reg_names: Vec<Register>,
+    ram: Ram, // TODO: Make this an device mapper
 }
 
 // public methods
 impl Cpu {
     pub fn new(mem_size: usize) -> Self {
-        let reg_names = vec![
-            "acc".to_string(), // Accumulator
-            "ip".to_string(),  // Instruction Pointer
-            "r1".to_string(),  // Register 1
-            "r2".to_string(),  // Register 2
-            "r3".to_string(),  // Register 3
-            "r4".to_string(),  // Register 4
-            "r5".to_string(),  // Register 5
-            "r6".to_string(),  // Register 6
-            "r7".to_string(),  // Register 7
-            "r8".to_string(),  // Register 8
-        ];
+        // Get all the registers
+        let reg_names = Register::all();
 
         // Make a register memory buffer
         let regs = Registers::new(reg_names.len() * std::mem::size_of::<u64>());
@@ -58,25 +48,26 @@ impl Cpu {
 impl Cpu {
     // Read a register
     fn read_reg(&self, name: &str) -> u64 {
-        let addr = match self.regs_maps.get(name) {
-            Some(addr) => addr,
-            None => panic!("Register {} not found", name),
-        };
-        self.regs.read(*addr)
+        let addr = self.get_reg_addr(name);
+        self.regs.read(addr)
     }
 
     // Write a register
     fn write_reg(&mut self, name: &str, data: u64) {
-        let addr = match self.regs_maps.get(name) {
-            Some(addr) => addr,
+        let addr = self.get_reg_addr(name);
+        self.regs.write(addr, data);
+    }
+
+    fn get_reg_addr(&self, name: &str) -> u64 {
+        match self.regs_maps.get(name) {
+            Some(addr) => *addr,
             None => panic!("Register {} not found", name),
-        };
-        self.regs.write(*addr, data);
+        }
     }
 
     // Index an register
-    fn index_reg(&mut self, index: u8) -> &str {
-        &self.reg_names[index as usize]
+    fn index_reg(&mut self, index: u8) -> Register {
+        self.reg_names[index as usize]
     }
 
     // Fetch 8 bits of data from the instruction pointer
