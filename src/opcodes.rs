@@ -52,8 +52,7 @@ pub enum Operand {
 pub struct Instruction {
     opcode: Opcode,
     addr_mode: AddrMode,
-    operand_one: Operand,
-    operand_two: Operand,
+    operands: (Operand, Operand),
 }
 
 impl Instruction {
@@ -61,8 +60,7 @@ impl Instruction {
         Self {
             opcode,
             addr_mode,
-            operand_one: operands.0,
-            operand_two: operands.1,
+            operands,
         }
     }
 }
