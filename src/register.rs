@@ -14,51 +14,43 @@ pub enum Register {
 
 impl Register {
     pub fn all() -> Vec<Register> {
-        vec![
-            Register::Acc,
-            Register::Ip,
-            Register::R1,
-            Register::R2,
-            Register::R3,
-            Register::R4,
-            Register::R5,
-            Register::R6,
-            Register::R7,
-            Register::R8,
-        ]
+        use Register::*;
+        vec![Acc, Ip, R1, R2, R3, R4, R5, R6, R7, R8]
     }
 }
 
 impl ToString for Register {
     fn to_string(&self) -> String {
+        use Register::*;
         match self {
-            Register::Acc => "acc".to_string(),
-            Register::Ip => "ip".to_string(),
-            Register::R1 => "r1".to_string(),
-            Register::R2 => "r2".to_string(),
-            Register::R3 => "r3".to_string(),
-            Register::R4 => "r4".to_string(),
-            Register::R5 => "r5".to_string(),
-            Register::R6 => "r6".to_string(),
-            Register::R7 => "r7".to_string(),
-            Register::R8 => "r8".to_string(),
+            Acc => "acc".to_string(),
+            Ip => "ip".to_string(),
+            R1 => "r1".to_string(),
+            R2 => "r2".to_string(),
+            R3 => "r3".to_string(),
+            R4 => "r4".to_string(),
+            R5 => "r5".to_string(),
+            R6 => "r6".to_string(),
+            R7 => "r7".to_string(),
+            R8 => "r8".to_string(),
         }
     }
 }
 
 impl From<&str> for Register {
     fn from(name: &str) -> Self {
+        use Register::*;
         match name {
-            "acc" => Register::Acc,
-            "ip" => Register::Ip,
-            "r1" => Register::R1,
-            "r2" => Register::R2,
-            "r3" => Register::R3,
-            "r4" => Register::R4,
-            "r5" => Register::R5,
-            "r6" => Register::R6,
-            "r7" => Register::R7,
-            "r8" => Register::R8,
+            "acc" => Acc,
+            "ip" => Ip,
+            "r1" => R1,
+            "r2" => R2,
+            "r3" => R3,
+            "r4" => R4,
+            "r5" => R5,
+            "r6" => R6,
+            "r7" => R7,
+            "r8" => R8,
             _ => panic!("Invalid register name: {}", name),
         }
     }

@@ -7,11 +7,12 @@ pub enum Opcode {
 
 impl From<u8> for Opcode {
     fn from(opcode: u8) -> Self {
+        use Opcode::*;
         match opcode {
-            0x00 => Opcode::Nop,
-            0x01 => Opcode::Mov,
-            0x02 => Opcode::Lod,
-            0x03 => Opcode::Str,
+            0x00 => Nop,
+            0x01 => Mov,
+            0x02 => Lod,
+            0x03 => Str,
             _ => panic!("Invalid opcode: {0:#x}", opcode),
         }
     }
