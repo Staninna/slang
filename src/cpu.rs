@@ -40,31 +40,35 @@ impl Cpu {
         }
     }
 
+    // Run the CPU
     pub fn run(&mut self) {
-        self.fetch();
+        loop {
+            // Fetch the instruction
+            let instr = self.fetch();
+
+            // Execute the instruction
+            self.execute(instr);
+        }
     }
 }
 
 // private methods
 impl Cpu {
     // Read a register
-    fn read_reg(&self, name: &str) -> u64 {
-        let addr = self.get_reg_addr(name);
+    fn read_reg(&self, reg: Register) -> u64 {
+        let addr = self.get_reg_addr(reg);
         self.regs.read(addr)
     }
 
     // Write a register
-    fn write_reg(&mut self, name: &str, data: u64) {
-        let addr = self.get_reg_addr(name);
+    fn write_reg(&mut self, reg: Register, data: u64) {
+        let addr = self.get_reg_addr(reg);
         self.regs.write(addr, data);
     }
 
-    // Get the address of a register by name
-    fn get_reg_addr(&self, name: &str) -> u64 {
-        match self.regs_addr_map.get(name) {
-            Some(addr) => *addr,
-            None => panic!("Register {} not found", name),
-        }
+    // Get reg address
+    fn get_reg_addr(&self, reg: Register) -> u64 {
+        *self.regs_addr_map.get(&reg.to_string()).unwrap()
     }
 
     // Index an register
@@ -74,17 +78,17 @@ impl Cpu {
 
     // Fetch 8 bits of data from the instruction pointer
     fn fetch8(&mut self) -> u8 {
-        let ip = self.read_reg("ip");
+        let ip = self.read_reg(Register::Ip);
         let data = self.ram.read(ip);
-        self.write_reg("ip", ip + 1);
+        self.write_reg(Register::Ip, ip + 1);
         data
     }
 
     // Fetch 64 bits of data from the instruction pointer
     fn fetch64(&mut self) -> u64 {
-        let ip = self.read_reg("ip");
+        let ip = self.read_reg(Register::Ip);
         let data = self.ram.read64(ip);
-        self.write_reg("ip", ip + 8);
+        self.write_reg(Register::Ip, ip + 8);
         data
     }
 
@@ -113,6 +117,59 @@ impl Cpu {
             ImmToMem => (Imm(self.fetch64()), Mem(self.fetch64())),
             MemToReg => (Mem(self.fetch64()), Reg(self.fetch8())),
             MemToMem => (Mem(self.fetch64()), Mem(self.fetch64())),
+        }
+    }
+
+    // Execute an instruction
+    fn execute(&mut self, instr: Instruction) {
+        let (opcode, _, operands) = instr.unpack();
+
+        use Opcode::*;
+        match opcode {
+            Nop => {}
+            Mov => self.mov(operands),
+            Lod => todo!(),
+            Str => todo!(),
+        }
+    }
+
+    fn mov(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        match operands {
+            // Imm -> Reg
+            (Imm(imm), Reg(reg)) => {
+                let reg = self.index_reg(reg);
+                self.write_reg(reg, imm);
+            }
+            // Imm -> Mem
+            (Imm(imm), Mem(mem)) => {
+                self.ram.write64(mem, imm);
+            }
+            // Reg -> Reg
+            (Reg(reg), Reg(reg2)) => {
+                let reg1 = self.index_reg(reg);
+                let reg2 = self.index_reg(reg2);
+                let data = self.read_reg(reg1);
+                self.write_reg(reg2, data);
+            }
+            // Reg -> Mem
+            (Reg(reg), Mem(mem)) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                self.ram.write64(mem, data);
+            }
+            // Mem -> Reg
+            (Mem(mem), Reg(reg)) => {
+                let reg = self.index_reg(reg);
+                let data = self.ram.read64(mem);
+                self.write_reg(reg, data);
+            }
+            // Mem -> Mem
+            (Mem(mem), Mem(mem2)) => {
+                let data = self.ram.read64(mem);
+                self.ram.write64(mem2, data);
+            }
+            _ => panic!("Invalid operands for mov instruction"),
         }
     }
 }

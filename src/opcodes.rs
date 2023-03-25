@@ -51,9 +51,9 @@ pub enum Operand {
 }
 
 pub struct Instruction {
-    opcode: Opcode,
-    addr_mode: AddrMode,
-    operands: (Operand, Operand),
+    pub opcode: Opcode,
+    pub addr_mode: AddrMode,
+    pub operands: (Operand, Operand),
 }
 
 impl Instruction {
@@ -63,5 +63,9 @@ impl Instruction {
             addr_mode,
             operands,
         }
+    }
+
+    pub fn unpack(self) -> (Opcode, AddrMode, (Operand, Operand)) {
+        (self.opcode, self.addr_mode, self.operands)
     }
 }
