@@ -10,32 +10,32 @@ use crate::{
 use hashbrown::HashMap;
 
 pub struct Cpu {
-    regs: Registers,
-    regs_maps: HashMap<String, u64>,
-    reg_names: Vec<Register>,
     ram: Ram, // TODO: Make this an device mapper
+    regs: Registers,
+    regs_names: Vec<Register>,
+    regs_addr_map: HashMap<String, u64>,
 }
 
 // public methods
 impl Cpu {
     pub fn new(mem_size: usize) -> Self {
         // Get all the registers
-        let reg_names = Register::all();
+        let regs_names = Register::all();
 
         // Make a register memory buffer
-        let regs = Registers::new(reg_names.len() * std::mem::size_of::<u64>());
+        let regs = Registers::new(regs_names.len() * std::mem::size_of::<u64>());
 
         // Make a register map
-        let mut regs_maps: HashMap<String, u64> = HashMap::new();
-        for (i, name) in reg_names.iter().enumerate() {
-            regs_maps.insert(name.to_string(), (i * std::mem::size_of::<u64>()) as u64);
+        let mut regs_addr_map = HashMap::new();
+        for (i, name) in regs_names.iter().enumerate() {
+            regs_addr_map.insert(name.to_string(), (i * std::mem::size_of::<u64>()) as u64);
         }
 
         // Return the CPU
         Self {
             regs,
-            regs_maps,
-            reg_names,
+            regs_names,
+            regs_addr_map,
             ram: Ram::new(mem_size),
         }
     }
@@ -60,7 +60,7 @@ impl Cpu {
     }
 
     fn get_reg_addr(&self, name: &str) -> u64 {
-        match self.regs_maps.get(name) {
+        match self.regs_addr_map.get(name) {
             Some(addr) => *addr,
             None => panic!("Register {} not found", name),
         }
@@ -68,7 +68,7 @@ impl Cpu {
 
     // Index an register
     fn index_reg(&mut self, index: u8) -> Register {
-        self.reg_names[index as usize]
+        self.regs_names[index as usize]
     }
 
     // Fetch 8 bits of data from the instruction pointer
