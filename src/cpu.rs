@@ -142,7 +142,7 @@ impl Cpu {
 
             // Bitwise
             And => self.and(operands),
-            Or => todo!(),
+            Or => self.or(operands),
             Xor => todo!(),
             Not => todo!(),
             Shl => todo!(),
@@ -381,6 +381,29 @@ impl Cpu {
                 self.write_reg(Acc, data & data2);
             }
             _ => panic!("Invalid operands for and instruction"),
+        }
+    }
+
+    // Bitwise OR
+    fn or(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Reg -> Imm
+            (Reg(reg), Imm(imm)) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                self.write_reg(Acc, data | imm);
+            }
+            // Reg -> Reg
+            (Reg(reg), Reg(reg2)) => {
+                let reg1 = self.index_reg(reg);
+                let reg2 = self.index_reg(reg2);
+                let data = self.read_reg(reg1);
+                let data2 = self.read_reg(reg2);
+                self.write_reg(Acc, data | data2);
+            }
+            _ => panic!("Invalid operands for or instruction"),
         }
     }
 }
