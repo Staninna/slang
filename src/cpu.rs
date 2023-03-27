@@ -117,6 +117,7 @@ impl Cpu {
             ImmToMem => (Imm(self.fetch64()), Mem(self.fetch64())),
             MemToReg => (Mem(self.fetch64()), Reg(self.fetch8())),
             MemToMem => (Mem(self.fetch64()), Mem(self.fetch64())),
+            Literal => (Imm(self.fetch64()), Operand::Null),
             Register => (Reg(self.fetch8()), Operand::Null),
             Memory => (Mem(self.fetch64()), Operand::Null),
         }
@@ -149,6 +150,17 @@ impl Cpu {
             Not => self.not(operands),
             Shl => self.shl(operands),
             Shr => self.shr(operands),
+
+            // Branching
+            Jmp => todo!(),
+            Jeq => todo!(),
+            Jne => todo!(),
+            Jgt => todo!(),
+            Jlt => todo!(),
+            Jge => todo!(),
+            Jle => todo!(),
+            Jnz => todo!(),
+            Jz => todo!(),
         }
     }
 
