@@ -152,7 +152,7 @@ impl Cpu {
             Shr => self.shr(operands),
 
             // Branching
-            Jmp => todo!(),
+            Jmp => self.jmp(operands),
             Jeq => todo!(),
             Jne => todo!(),
             Jgt => todo!(),
@@ -499,6 +499,25 @@ impl Cpu {
                 self.write_reg(Acc, data >> data2);
             }
             _ => panic!("Invalid operands for shr instruction"),
+        }
+    }
+
+    // Jump
+    fn jmp(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Reg
+            (Reg(reg), Null) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                self.write_reg(Ip, data);
+            }
+            // Imm
+            (Imm(imm), Null) => {
+                self.write_reg(Ip, imm);
+            }
+            _ => panic!("Invalid operands for jmp instruction"),
         }
     }
 }
