@@ -153,14 +153,14 @@ impl Cpu {
 
             // Branching
             Jmp => self.jmp(operands),
-            Jeq => todo!(),
-            Jne => todo!(),
-            Jgt => todo!(),
-            Jlt => todo!(),
-            Jge => todo!(),
-            Jle => todo!(),
-            Jnz => todo!(),
-            Jz => todo!(),
+            Jeq => self.jeq(operands),
+            Jne => self.jne(operands),
+            Jgt => self.jgt(operands),
+            Jlt => self.jlt(operands),
+            Jge => self.jge(operands),
+            Jle => self.jle(operands),
+            Jnz => self.jnz(operands),
+            Jz => self.jz(operands),
         }
     }
 
@@ -518,6 +518,206 @@ impl Cpu {
                 self.write_reg(Ip, imm);
             }
             _ => panic!("Invalid operands for jmp instruction"),
+        }
+    }
+
+    // Jump if equal
+    fn jeq(&mut self, operands: (Operand, Operand)) {
+        let acc = self.read_reg(Register::Acc);
+
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Reg
+            (Reg(reg), Null) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                if acc == data {
+                    self.write_reg(Ip, data);
+                }
+            }
+            // Imm
+            (Imm(imm), Null) => {
+                if acc == imm {
+                    self.write_reg(Ip, imm);
+                }
+            }
+            _ => panic!("Invalid operands for jeq instruction"),
+        }
+    }
+
+    // Jump if not equal
+    fn jne(&mut self, operands: (Operand, Operand)) {
+        let acc = self.read_reg(Register::Acc);
+
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Reg
+            (Reg(reg), Null) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                if acc != data {
+                    self.write_reg(Ip, data);
+                }
+            }
+            // Imm
+            (Imm(imm), Null) => {
+                if acc != imm {
+                    self.write_reg(Ip, imm);
+                }
+            }
+            _ => panic!("Invalid operands for jne instruction"),
+        }
+    }
+
+    // Jump if greater than
+    fn jgt(&mut self, operands: (Operand, Operand)) {
+        let acc = self.read_reg(Register::Acc);
+
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Reg
+            (Reg(reg), Null) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                if acc > data {
+                    self.write_reg(Ip, data);
+                }
+            }
+            // Imm
+            (Imm(imm), Null) => {
+                if acc > imm {
+                    self.write_reg(Ip, imm);
+                }
+            }
+            _ => panic!("Invalid operands for jgt instruction"),
+        }
+    }
+
+    // Jump if less than
+    fn jlt(&mut self, operands: (Operand, Operand)) {
+        let acc = self.read_reg(Register::Acc);
+
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Reg
+            (Reg(reg), Null) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                if acc < data {
+                    self.write_reg(Ip, data);
+                }
+            }
+            // Imm
+            (Imm(imm), Null) => {
+                if acc < imm {
+                    self.write_reg(Ip, imm);
+                }
+            }
+            _ => panic!("Invalid operands for jlt instruction"),
+        }
+    }
+
+    // Jump if greater than or equal to
+    fn jge(&mut self, operands: (Operand, Operand)) {
+        let acc = self.read_reg(Register::Acc);
+
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Reg
+            (Reg(reg), Null) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                if acc >= data {
+                    self.write_reg(Ip, data);
+                }
+            }
+            // Imm
+            (Imm(imm), Null) => {
+                if acc >= imm {
+                    self.write_reg(Ip, imm);
+                }
+            }
+            _ => panic!("Invalid operands for jge instruction"),
+        }
+    }
+
+    // Jump if less than or equal to
+    fn jle(&mut self, operands: (Operand, Operand)) {
+        let acc = self.read_reg(Register::Acc);
+
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Reg
+            (Reg(reg), Null) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                if acc <= data {
+                    self.write_reg(Ip, data);
+                }
+            }
+            // Imm
+            (Imm(imm), Null) => {
+                if acc <= imm {
+                    self.write_reg(Ip, imm);
+                }
+            }
+            _ => panic!("Invalid operands for jle instruction"),
+        }
+    }
+
+    // Jump not zero
+    fn jnz(&mut self, operands: (Operand, Operand)) {
+        let acc = self.read_reg(Register::Acc);
+
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Reg
+            (Reg(reg), Null) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                if acc != 0 {
+                    self.write_reg(Ip, data);
+                }
+            }
+            // Imm
+            (Imm(imm), Null) => {
+                if acc != 0 {
+                    self.write_reg(Ip, imm);
+                }
+            }
+            _ => panic!("Invalid operands for jnz instruction"),
+        }
+    }
+
+    // Jump zero
+    fn jz(&mut self, operands: (Operand, Operand)) {
+        let acc = self.read_reg(Register::Acc);
+
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Reg
+            (Reg(reg), Null) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                if acc == 0 {
+                    self.write_reg(Ip, data);
+                }
+            }
+            // Imm
+            (Imm(imm), Null) => {
+                if acc == 0 {
+                    self.write_reg(Ip, imm);
+                }
+            }
+            _ => panic!("Invalid operands for jz instruction"),
         }
     }
 }
