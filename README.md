@@ -43,6 +43,12 @@ The Slang VM supports the following opcodes (for now):
 | `SUB`  | Subtract     | 8-bit | `0x05` | `IMM->REG`, `REG->REG`, `MEM->REG`                                     |
 | `MUL`  | Multiply     | 8-bit | `0x06` | `IMM->REG`, `REG->REG`, `MEM->REG`                                     |
 | `DIV`  | Divide       | 8-bit | `0x07` | `IMM->REG`, `REG->REG`, `MEM->REG`                                     |
+| `AND`  | And          | 8-bit | `0x08` | `REG->IMM`, `REG->REG`                                                 |
+| `OR`   | Or           | 8-bit | `0x09` | `REG->IMM`, `REG->REG`                                                 |
+| `XOR`  | Xor          | 8-bit | `0x0A` | `REG->IMM`, `REG->REG`                                                 |
+| `NOT`  | Not          | 8-bit | `0x0B` | `REG->REG`                                                             |
+| `SHL`  | Shift left   | 8-bit | `0x0C` | `REG->IMM`, `REG->REG`                                                 |
+| `SHR`  | Shift right  | 8-bit | `0x0D` | `REG->IMM`, `REG->REG`                                                 |
 
 ## Addressing Modes
 

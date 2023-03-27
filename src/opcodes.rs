@@ -12,6 +12,14 @@ pub enum Opcode {
     Sub = 0x05,
     Mul = 0x06,
     Div = 0x07,
+
+    // Bitwise
+    And = 0x08,
+    Or = 0x09,
+    Xor = 0x0A,
+    Not = 0x0B,
+    Shl = 0x0C,
+    Shr = 0x0D,
 }
 
 impl From<u8> for Opcode {
@@ -31,6 +39,15 @@ impl From<u8> for Opcode {
             0x05 => Sub,
             0x06 => Mul,
             0x07 => Div,
+
+            // Bitwise
+            0x08 => And,
+            0x09 => Or,
+            0x0A => Xor,
+            0x0B => Not,
+            0x0C => Shl,
+            0x0D => Shr,
+
             _ => panic!("Invalid opcode: {0:#x}", opcode),
         }
     }
