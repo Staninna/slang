@@ -61,6 +61,18 @@ Miscellaneous operations:
 | `SHL`  | Shift left  | 8-bit | `0x0C` | `REG->IMM`, `REG->REG` |
 | `SHR`  | Shift right | 8-bit | `0x0D` | `REG->IMM`, `REG->REG` |
 
+| Opcode | Description                      | Size  | Code   | Modes                 |
+| ------ | -------------------------------- | ----- | ------ | --------------------- |
+| `JMP`  | Jump to addr                     | 8-bit | `0x0E` | `REGISTER`, `LITERAL` |
+| `JEQ`  | Jump if equal                    | 8-bit | `0x0F` | `REGISTER`, `LITERAL` |
+| `JNE`  | Jump if not equal                | 8-bit | `0x10` | `REGISTER`, `LITERAL` |
+| `JGT`  | Jump if greater than             | 8-bit | `0x11` | `REGISTER`, `LITERAL` |
+| `JLT`  | Jump if less than                | 8-bit | `0x12` | `REGISTER`, `LITERAL` |
+| `JGE`  | Jump if greater than or equal to | 8-bit | `0x13` | `REGISTER`, `LITERAL` |
+| `JLE`  | Jump if less than or equal to    | 8-bit | `0x14` | `REGISTER`, `LITERAL` |
+| `JNZ`  | Jump if not zero                 | 8-bit | `0x15` | `REGISTER`, `LITERAL` |
+| `JZ`   | Jump if zero                     | 8-bit | `0x16` | `REGISTER`, `LITERAL` |
+
 ## Addressing Modes
 
 The Slang VM supports the following addressing modes:
@@ -76,8 +88,9 @@ The Slang VM supports the following addressing modes:
 | `MEM->REG` | Memory to register    | 8-bit | `0x50` | 64-bit -> 8-bit  |
 | `MEM->MEM` | Memory to memory      | 8-bit | `0x60` | 64-bit -> 64-bit |
 |            |                       |       |        |                  |
-| `REGISTER` | Registers             | 8-bit | `0x70` | 8-bit -> 8-bit   |
-| `MEMORY`   | Memory                | 8-bit | `0x80` | 64-bit -> 64-bit |
+| `LITERAL`  | Literals              | 8-bit | `0x70` | 64-bit           |
+| `REGISTER` | Registers             | 8-bit | `0x80` | 8-bit            |
+| `MEMORY`   | Memory                | 8-bit | `0x90` | 64-bit           |
 
 ## Bytecode Format
 

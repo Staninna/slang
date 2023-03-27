@@ -20,6 +20,17 @@ pub enum Opcode {
     Not = 0x0B,
     Shl = 0x0C,
     Shr = 0x0D,
+
+    // Branching
+    Jmp = 0x0E,
+    Jeq = 0x0F,
+    Jne = 0x10,
+    Jgt = 0x11,
+    Jlt = 0x12,
+    Jge = 0x13,
+    Jle = 0x14,
+    Jnz = 0x15,
+    Jz = 0x16,
 }
 
 impl From<u8> for Opcode {
@@ -48,6 +59,17 @@ impl From<u8> for Opcode {
             0x0C => Shl,
             0x0D => Shr,
 
+            // Branching
+            0x0E => Jmp,
+            0x0F => Jeq,
+            0x10 => Jne,
+            0x11 => Jgt,
+            0x12 => Jlt,
+            0x13 => Jge,
+            0x14 => Jle,
+            0x15 => Jnz,
+            0x16 => Jz,
+
             _ => panic!("Invalid opcode: {0:#x}", opcode),
         }
     }
@@ -61,8 +83,9 @@ pub enum AddrMode {
     ImmToMem = 0x40,
     MemToReg = 0x50,
     MemToMem = 0x60,
-    Register = 0x70,
-    Memory = 0x80,
+    Literal = 0x70,
+    Register = 0x80,
+    Memory = 0x90,
 }
 
 impl From<u8> for AddrMode {
@@ -76,8 +99,9 @@ impl From<u8> for AddrMode {
             0x40 => ImmToMem,
             0x50 => MemToReg,
             0x60 => MemToMem,
-            0x70 => Register,
-            0x80 => Memory,
+            0x70 => Literal,
+            0x80 => Register,
+            0x90 => Memory,
             _ => panic!("Invalid address mode: {0:#x}", addr_mode),
         }
     }
