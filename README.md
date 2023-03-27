@@ -46,7 +46,7 @@ The Slang VM supports the following opcodes (for now):
 | `AND`  | And          | 8-bit | `0x08` | `REG->IMM`, `REG->REG`                                                 |
 | `OR`   | Or           | 8-bit | `0x09` | `REG->IMM`, `REG->REG`                                                 |
 | `XOR`  | Xor          | 8-bit | `0x0A` | `REG->IMM`, `REG->REG`                                                 |
-| `NOT`  | Not          | 8-bit | `0x0B` | `REG->REG`                                                             |
+| `NOT`  | Not          | 8-bit | `0x0B` | `REG`, `MEM`                                                           |
 | `SHL`  | Shift left   | 8-bit | `0x0C` | `REG->IMM`, `REG->REG`                                                 |
 | `SHR`  | Shift right  | 8-bit | `0x0D` | `REG->IMM`, `REG->REG`                                                 |
 
@@ -64,6 +64,9 @@ The Slang VM supports the following addressing modes:
 |            |                       |       |        |                  |
 | `MEM->REG` | Memory to register    | 8-bit | `0x50` | 64-bit -> 8-bit  |
 | `MEM->MEM` | Memory to memory      | 8-bit | `0x60` | 64-bit -> 64-bit |
+|            |                       |       |        |                  |
+| `REG`      | Register              | 8-bit | `0x70` | 8-bit            |
+| `MEM`      | Memory                | 8-bit | `0x80` | 64-bit           |
 
 ## Bytecode Format
 

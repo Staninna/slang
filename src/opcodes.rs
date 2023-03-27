@@ -61,6 +61,8 @@ pub enum AddrMode {
     ImmToMem = 0x40,
     MemToReg = 0x50,
     MemToMem = 0x60,
+    Register = 0x70,
+    Memory = 0x80,
 }
 
 impl From<u8> for AddrMode {
@@ -73,6 +75,8 @@ impl From<u8> for AddrMode {
             0x40 => AddrMode::ImmToMem,
             0x50 => AddrMode::MemToReg,
             0x60 => AddrMode::MemToMem,
+            0x70 => AddrMode::Register,
+            0x80 => AddrMode::Memory,
             _ => panic!("Invalid address mode: {0:#x}", addr_mode),
         }
     }
