@@ -15,7 +15,7 @@ pub trait Device64Bit {
     fn write(&mut self, addr: u64, data: u64);
     fn size(&self) -> usize;
     fn check_addr(&self, addr: u64) -> bool {
-        return addr < self.size() as u64;
+        addr < self.size() as u64
     }
 }
 
@@ -24,7 +24,7 @@ pub trait Device8Bit {
     fn write(&mut self, addr: u64, data: u8);
     fn size(&self) -> usize;
     fn check_addr(&self, addr: u64) -> bool {
-        return addr < self.size() as u64;
+        addr < self.size() as u64
     }
 
     // Read 64 bits from a 8 bit device
