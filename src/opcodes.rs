@@ -54,7 +54,7 @@ impl From<u8> for Opcode {
 }
 
 pub enum AddrMode {
-    None = 0x00,
+    Null = 0x00,
     RegToReg = 0x10,
     RegToMem = 0x20,
     ImmToReg = 0x30,
@@ -68,7 +68,7 @@ pub enum AddrMode {
 impl From<u8> for AddrMode {
     fn from(addr_mode: u8) -> Self {
         match addr_mode {
-            0x00 => AddrMode::None,
+            0x00 => AddrMode::Null,
             0x10 => AddrMode::RegToReg,
             0x20 => AddrMode::RegToMem,
             0x30 => AddrMode::ImmToReg,
@@ -83,7 +83,7 @@ impl From<u8> for AddrMode {
 }
 
 pub enum Operand {
-    None,
+    Null,
     Reg(u8),
     Imm(u64),
     Mem(u64),

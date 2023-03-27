@@ -110,15 +110,15 @@ impl Cpu {
         use AddrMode::*;
         use Operand::*;
         match addr_mode {
-            AddrMode::None => (Operand::None, Operand::None),
+            AddrMode::Null => (Operand::Null, Operand::Null),
             RegToReg => (Reg(self.fetch8()), Reg(self.fetch8())),
             RegToMem => (Reg(self.fetch8()), Mem(self.fetch64())),
             ImmToReg => (Imm(self.fetch64()), Reg(self.fetch8())),
             ImmToMem => (Imm(self.fetch64()), Mem(self.fetch64())),
             MemToReg => (Mem(self.fetch64()), Reg(self.fetch8())),
             MemToMem => (Mem(self.fetch64()), Mem(self.fetch64())),
-            Register => (Reg(self.fetch8()), Operand::None),
-            Memory => (Mem(self.fetch64()), Operand::None),
+            Register => (Reg(self.fetch8()), Operand::Null),
+            Memory => (Mem(self.fetch64()), Operand::Null),
         }
     }
 
@@ -151,14 +151,6 @@ impl Cpu {
             Shr => self.shr(operands),
         }
     }
-
-    // Order the `match operands` in this order:
-    // 1. IMM->REG
-    // 2. IMM->MEM
-    // 3. REG->REG
-    // 4. REG->MEM
-    // 5. MEM->REG
-    // 6. MEM->MEM
 
     // Move
     fn mov(&mut self, operands: (Operand, Operand)) {
@@ -438,13 +430,13 @@ impl Cpu {
         use Register::*;
         match operands {
             // Reg
-            (Reg(reg), None) => {
+            (Reg(reg), Null) => {
                 let reg = self.index_reg(reg);
                 let data = self.read_reg(reg);
                 self.write_reg(Acc, !data);
             }
             // Mem
-            (Mem(mem), None) => {
+            (Mem(mem), Null) => {
                 let data = self.ram.read64(mem);
                 self.write_reg(Acc, !data);
             }
