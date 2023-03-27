@@ -102,6 +102,7 @@ impl From<u8> for AddrMode {
             0x70 => Literal,
             0x80 => Register,
             0x90 => Memory,
+
             _ => panic!("Invalid address mode: {0:#x}", addr_mode),
         }
     }
