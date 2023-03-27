@@ -126,10 +126,15 @@ impl Cpu {
 
         use Opcode::*;
         match opcode {
-            Nop => {}
+            // Misc
+            Nop => {} // No operation
+
+            // Load and store
             Mov => self.mov(operands),
             Lod => self.lod(operands),
             Str => self.str(operands),
+
+            // Arithmetic
             Add => self.add(operands),
             Sub => self.sub(operands),
             Mul => self.mul(operands),
@@ -145,7 +150,7 @@ impl Cpu {
     // 5. MEM->REG
     // 6. MEM->MEM
 
-    // Move data
+    // Move
     fn mov(&mut self, operands: (Operand, Operand)) {
         use Operand::*;
         match operands {
@@ -186,7 +191,7 @@ impl Cpu {
         }
     }
 
-    // Load data
+    // Load
     fn lod(&mut self, operands: (Operand, Operand)) {
         use Operand::*;
         match operands {
@@ -205,7 +210,7 @@ impl Cpu {
         }
     }
 
-    // Store data
+    // Store
     fn str(&mut self, operands: (Operand, Operand)) {
         use Operand::*;
         match operands {
@@ -228,7 +233,7 @@ impl Cpu {
         }
     }
 
-    // Add data
+    // Add
     fn add(&mut self, operands: (Operand, Operand)) {
         use Operand::*;
         use Register::*;
@@ -258,7 +263,7 @@ impl Cpu {
         }
     }
 
-    // Subtract data
+    // Subtract
     fn sub(&mut self, operands: (Operand, Operand)) {
         use Operand::*;
         use Register::*;
@@ -288,7 +293,7 @@ impl Cpu {
         }
     }
 
-    // Multiply data
+    // Multiply
     fn mul(&mut self, operands: (Operand, Operand)) {
         use Operand::*;
         use Register::*;
@@ -318,7 +323,7 @@ impl Cpu {
         }
     }
 
-    // Divide data
+    // Divide
     fn div(&mut self, operands: (Operand, Operand)) {
         use Operand::*;
         use Register::*;

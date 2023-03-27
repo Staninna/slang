@@ -1,8 +1,13 @@
 pub enum Opcode {
+    // Misc
     Nop = 0x00,
+
+    // Load and store
     Mov = 0x01,
     Lod = 0x02,
     Str = 0x03,
+
+    // Arithmetic
     Add = 0x04,
     Sub = 0x05,
     Mul = 0x06,
@@ -13,10 +18,15 @@ impl From<u8> for Opcode {
     fn from(opcode: u8) -> Self {
         use Opcode::*;
         match opcode {
+            // Misc
             0x00 => Nop,
+
+            // Load and store
             0x01 => Mov,
             0x02 => Lod,
             0x03 => Str,
+
+            // Arithmetic
             0x04 => Add,
             0x05 => Sub,
             0x06 => Mul,
