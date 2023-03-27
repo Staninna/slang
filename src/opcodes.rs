@@ -67,16 +67,17 @@ pub enum AddrMode {
 
 impl From<u8> for AddrMode {
     fn from(addr_mode: u8) -> Self {
+        use AddrMode::*;
         match addr_mode {
-            0x00 => AddrMode::Null,
-            0x10 => AddrMode::RegToReg,
-            0x20 => AddrMode::RegToMem,
-            0x30 => AddrMode::ImmToReg,
-            0x40 => AddrMode::ImmToMem,
-            0x50 => AddrMode::MemToReg,
-            0x60 => AddrMode::MemToMem,
-            0x70 => AddrMode::Register,
-            0x80 => AddrMode::Memory,
+            0x00 => Null,
+            0x10 => RegToReg,
+            0x20 => RegToMem,
+            0x30 => ImmToReg,
+            0x40 => ImmToMem,
+            0x50 => MemToReg,
+            0x60 => MemToMem,
+            0x70 => Register,
+            0x80 => Memory,
             _ => panic!("Invalid address mode: {0:#x}", addr_mode),
         }
     }
