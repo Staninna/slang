@@ -117,6 +117,8 @@ impl Cpu {
             ImmToMem => (Imm(self.fetch64()), Mem(self.fetch64())),
             MemToReg => (Mem(self.fetch64()), Reg(self.fetch8())),
             MemToMem => (Mem(self.fetch64()), Mem(self.fetch64())),
+            Register => (Reg(self.fetch8()), Operand::None),
+            Memory => (Mem(self.fetch64()), Operand::None),
         }
     }
 
@@ -144,7 +146,7 @@ impl Cpu {
             And => self.and(operands),
             Or => self.or(operands),
             Xor => self.xor(operands),
-            Not => todo!(),
+            Not => self.not(operands),
             Shl => todo!(),
             Shr => todo!(),
         }
@@ -427,6 +429,26 @@ impl Cpu {
                 self.write_reg(Acc, data ^ data2);
             }
             _ => panic!("Invalid operands for xor instruction"),
+        }
+    }
+
+    // Bitwise NOT
+    fn not(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Reg
+            (Reg(reg), None) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                self.write_reg(Acc, !data);
+            }
+            // Mem
+            (Mem(mem), None) => {
+                let data = self.ram.read64(mem);
+                self.write_reg(Acc, !data);
+            }
+            _ => panic!("Invalid operands for not instruction"),
         }
     }
 }
