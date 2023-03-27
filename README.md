@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD033 -->
+
 # Slang VM
 
 ## Introduction
@@ -31,24 +33,33 @@ Here's a table of the Slang VM registers:
 
 The Slang VM supports the following opcodes (for now):
 
-<!-- Order Modes in this order: IMM->REG, IMM->MEM, REG->REG, REG->MEM, MEM->REG, MEM->MEM -->
+Miscellaneous operations:
 
-| Opcode | Description  | Size  | Code   | Modes                                                                  |
-| ------ | ------------ | ----- | ------ | ---------------------------------------------------------------------- |
-| `NOP`  | No operation | 8-bit | `0x00` | -                                                                      |
-| `MOV`  | Move         | 8-bit | `0x01` | `IMM->REG`, `IMM->MEM`, `REG->REG`, `REG->MEM`, `MEM->REG`, `MEM->MEM` |
-| `LOD`  | Load         | 8-bit | `0x02` | `IMM->REG`, `MEM->REG`                                                 |
-| `STR`  | Store        | 8-bit | `0x03` | `IMM->MEM`, `REG->MEM`, `MEM->MEM`                                     |
-| `ADD`  | Add          | 8-bit | `0x04` | `IMM->REG`, `REG->REG`, `MEM->REG`                                     |
-| `SUB`  | Subtract     | 8-bit | `0x05` | `IMM->REG`, `REG->REG`, `MEM->REG`                                     |
-| `MUL`  | Multiply     | 8-bit | `0x06` | `IMM->REG`, `REG->REG`, `MEM->REG`                                     |
-| `DIV`  | Divide       | 8-bit | `0x07` | `IMM->REG`, `REG->REG`, `MEM->REG`                                     |
-| `AND`  | And          | 8-bit | `0x08` | `REG->IMM`, `REG->REG`                                                 |
-| `OR`   | Or           | 8-bit | `0x09` | `REG->IMM`, `REG->REG`                                                 |
-| `XOR`  | Xor          | 8-bit | `0x0A` | `REG->IMM`, `REG->REG`                                                 |
-| `NOT`  | Not          | 8-bit | `0x0B` | `REGISTER`, `MEMORY`                                                   |
-| `SHL`  | Shift left   | 8-bit | `0x0C` | `REG->IMM`, `REG->REG`                                                 |
-| `SHR`  | Shift right  | 8-bit | `0x0D` | `REG->IMM`, `REG->REG`                                                 |
+| Opcode | Description  | Size  | Code   | Modes |
+| ------ | ------------ | ----- | ------ | ----- |
+| `NOP`  | No operation | 8-bit | `0x00` | -     |
+
+| Opcode | Description | Size  | Code   | Modes                                                                     |
+| ------ | ----------- | ----- | ------ | ------------------------------------------------------------------------- |
+| `MOV`  | Move        | 8-bit | `0x01` | `IMM->REG`, `IMM->MEM`, `REG->REG`,<br>`REG->MEM`, `MEM->REG`, `MEM->MEM` |
+| `LOD`  | Load        | 8-bit | `0x02` | `IMM->REG`, `MEM->REG`                                                    |
+| `STR`  | Store       | 8-bit | `0x03` | `IMM->MEM`, `REG->MEM`, `MEM->MEM`                                        |
+
+| Opcode | Description | Size  | Code   | Modes                              |
+| ------ | ----------- | ----- | ------ | ---------------------------------- |
+| `ADD`  | Add         | 8-bit | `0x04` | `IMM->REG`, `REG->REG`, `MEM->REG` |
+| `SUB`  | Subtract    | 8-bit | `0x05` | `IMM->REG`, `REG->REG`, `MEM->REG` |
+| `MUL`  | Multiply    | 8-bit | `0x06` | `IMM->REG`, `REG->REG`, `MEM->REG` |
+| `DIV`  | Divide      | 8-bit | `0x07` | `IMM->REG`, `REG->REG`, `MEM->REG` |
+
+| Opcode | Description | Size  | Code   | Modes                  |
+| ------ | ----------- | ----- | ------ | ---------------------- |
+| `AND`  | And         | 8-bit | `0x08` | `REG->IMM`, `REG->REG` |
+| `OR`   | Or          | 8-bit | `0x09` | `REG->IMM`, `REG->REG` |
+| `XOR`  | Xor         | 8-bit | `0x0A` | `REG->IMM`, `REG->REG` |
+| `NOT`  | Not         | 8-bit | `0x0B` | `REGISTER`, `MEMORY`   |
+| `SHL`  | Shift left  | 8-bit | `0x0C` | `REG->IMM`, `REG->REG` |
+| `SHR`  | Shift right | 8-bit | `0x0D` | `REG->IMM`, `REG->REG` |
 
 ## Addressing Modes
 
