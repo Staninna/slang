@@ -22,7 +22,7 @@ The Slang VM has 13 registers, including 8 general-purpose registers (R1-R8) and
 - `IP`: Instruction pointer for storing the address of the next instruction to be executed
 - `SP`: Stack pointer for storing the address of the top of the stack
 - `BP`: Base pointer for storing the address of the base of the stack
-- `RA`: Return address for storing the address of the next instruction to be executed after a function call returns
+- `RA`: Return address for storing the address of the next instruction to be executed after a subroutine call is returned
 
 Here's a table of the Slang VM registers:
 
