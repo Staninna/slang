@@ -1,42 +1,50 @@
 <!-- markdownlint-disable MD033 -->
 
-# Slang VM
+# Slang Virtual Machine
 
 ## Introduction
 
-I'd like to make another attempt at writing a virtual machine. This time, I'll try to create a 64-bit virtual machine and call it Slang, named after myself. My ultimate goal is to turn Slang into a programming language.
+In this project, I aim to create a virtual machine named Slang in honor of myself. The Slang VM will be a 64-bit virtual machine, and my ultimate goal is to evolve it into a programming language.
 
 ## Memory
 
-The Slang VM has 64-bit memory. Every memory address points to 8-bits (1 byte) of data. There will be a stack in the future, but for now, there is only a heap.
+The Slang VM's memory is 64-bit, where each memory address points to 8 bits or 1 byte of data. (WIP)
+
+## Stack
+
+The Slang VM features a 64-bit stack that grows downwards. The stack pointer (`SP`) indicates the top of the stack and is decremented by 1 when data is pushed onto the stack, and incremented by 1 when data is popped off the stack. The stack pointer is initialized to the maximum value provided by the amount of memory allocated to the Slang VM.
 
 ## Registers
 
-The Slang VM has ten registers, including eight general-purpose registers, one accumulator register, and one program counter register. I may add more registers in the future.
+The Slang VM has 13 registers, including 8 general-purpose registers (R1-R8) and 5 special-purpose registers (ACC, IP, SP, BP, RA). The special-purpose registers have specific purposes:
+
+- `ACC`: is the accumulator register, which is used to store the result some operations
+- `IP`: Instruction pointer for storing the address of the next instruction to be executed
+- `SP`: Stack pointer for storing the address of the top of the stack
+- `BP`: Base pointer for storing the address of the base of the stack
+- `RA`: Return address for storing the address of the next instruction to be executed after a function call returns
 
 Here's a table of the Slang VM registers:
 
-| Register | Description         | Size   | Code   | Initial Value |
-| -------- | ------------------- | ------ | ------ | ------------- |
-| `ACC`    | Accumulator         | 64-bit | `0x01` | `0x00`        |
-| `IP`     | Instruction pointer | 64-bit | `0x02` | `0x00`        |
-| `SP`     | Stack pointer       | 64-bit | `0x03` | `0x00`        |
-| `BP`     | Base pointer        | 64-bit | `0x04` | `0x00`        |
-| `RA`     | Return address      | 64-bit | `0x05` | `0x00`        |
-| `R1`     | Register 1          | 64-bit | `0x06` | `0x00`        |
-| `R2`     | Register 2          | 64-bit | `0x07` | `0x00`        |
-| `R3`     | Register 3          | 64-bit | `0x08` | `0x00`        |
-| `R4`     | Register 4          | 64-bit | `0x09` | `0x00`        |
-| `R5`     | Register 5          | 64-bit | `0x0A` | `0x00`        |
-| `R6`     | Register 6          | 64-bit | `0x0B` | `0x00`        |
-| `R7`     | Register 7          | 64-bit | `0x0C` | `0x00`        |
-| `R8`     | Register 8          | 64-bit | `0x0D` | `0x00`        |
+| Register | Description         | Size   | Code   | Initial Value                |
+| -------- | ------------------- | ------ | ------ | ---------------------------- |
+| `ACC`    | Accumulator         | 64-bit | `0x01` | `0x00`                       |
+| `IP`     | Instruction pointer | 64-bit | `0x02` | `0x00`                       |
+| `SP`     | Stack pointer       | 64-bit | `0x03` | Dynamic based on memory size |
+| `BP`     | Base pointer        | 64-bit | `0x04` | `0x00`                       |
+| `RA`     | Return address      | 64-bit | `0x05` | `0x00`                       |
+| `R1`     | Register 1          | 64-bit | `0x06` | `0x00`                       |
+| `R2`     | Register 2          | 64-bit | `0x07` | `0x00`                       |
+| `R3`     | Register 3          | 64-bit | `0x08` | `0x00`                       |
+| `R4`     | Register 4          | 64-bit | `0x09` | `0x00`                       |
+| `R5`     | Register 5          | 64-bit | `0x0A` | `0x00`                       |
+| `R6`     | Register 6          | 64-bit | `0x0B` | `0x00`                       |
+| `R7`     | Register 7          | 64-bit | `0x0C` | `0x00`                       |
+| `R8`     | Register 8          | 64-bit | `0x0D` | `0x00`                       |
 
 ## Opcodes
 
-The Slang VM supports the following opcodes (for now):
-
-Miscellaneous operations:
+The Slang VM supports the following opcodes:
 
 | Opcode | Description  | Size  | Code   | Modes |
 | ------ | ------------ | ----- | ------ | ----- |
@@ -115,6 +123,6 @@ The format of the bytecode is as follows:
 
 ## Maybe in the future
 
-* Call stack
-* Memory management (GC/Heap)
-* Virtual file system
+- Call stack
+- Memory management (GC/Heap)
+- Virtual file system
