@@ -1,6 +1,6 @@
 pub enum Opcode {
     // Misc
-    Nop = 0x00,
+    Nop = 0xFF,
 
     // Load and store
     Mov = 0x01,
@@ -8,38 +8,40 @@ pub enum Opcode {
     Str = 0x03,
 
     // Arithmetic
-    Add = 0x04,
-    Sub = 0x05,
-    Mul = 0x06,
-    Div = 0x07,
+    Add = 0x11,
+    Sub = 0x12,
+    Mul = 0x13,
+    Div = 0x14,
+    Inc = 0x15,
+    Dec = 0x16,
 
     // Bitwise
-    And = 0x08,
-    Or = 0x09,
-    Xor = 0x0A,
-    Not = 0x0B,
-    Shl = 0x0C,
-    Shr = 0x0D,
+    And = 0x21,
+    Or = 0x22,
+    Xor = 0x23,
+    Not = 0x24,
+    Shl = 0x25,
+    Shr = 0x26,
 
     // Branching
-    Jmp = 0x0E,
-    Jeq = 0x0F,
-    Jne = 0x10,
-    Jgt = 0x11,
-    Jlt = 0x12,
-    Jge = 0x13,
-    Jle = 0x14,
-    Jnz = 0x15,
-    Jz = 0x16,
+    Jmp = 0x31,
+    Jeq = 0x32,
+    Jne = 0x33,
+    Jgt = 0x34,
+    Jlt = 0x35,
+    Jge = 0x36,
+    Jle = 0x37,
+    Jnz = 0x38,
+    Jz = 0x39,
 
     // Stack
-    Psh = 0x17,
-    Pop = 0x18,
-    Dup = 0x19,
-    Swp = 0x1A,
-    Clr = 0x1B,
-    Ret = 0x1C,
-    Cal = 0x1D,
+    Psh = 0x41,
+    Pop = 0x42,
+    Dup = 0x43,
+    Swp = 0x44,
+    Clr = 0x45,
+    Ret = 0x46,
+    Cal = 0x47,
 }
 
 impl From<u8> for Opcode {
@@ -47,7 +49,7 @@ impl From<u8> for Opcode {
         use Opcode::*;
         match opcode {
             // Misc
-            0x00 => Nop,
+            0xFF => Nop,
 
             // Load and store
             0x01 => Mov,
@@ -55,38 +57,40 @@ impl From<u8> for Opcode {
             0x03 => Str,
 
             // Arithmetic
-            0x04 => Add,
-            0x05 => Sub,
-            0x06 => Mul,
-            0x07 => Div,
+            0x11 => Add,
+            0x12 => Sub,
+            0x13 => Mul,
+            0x14 => Div,
+            0x15 => Inc,
+            0x16 => Dec,
 
             // Bitwise
-            0x08 => And,
-            0x09 => Or,
-            0x0A => Xor,
-            0x0B => Not,
-            0x0C => Shl,
-            0x0D => Shr,
+            0x21 => And,
+            0x22 => Or,
+            0x23 => Xor,
+            0x24 => Not,
+            0x25 => Shl,
+            0x26 => Shr,
 
             // Branching
-            0x0E => Jmp,
-            0x0F => Jeq,
-            0x10 => Jne,
-            0x11 => Jgt,
-            0x12 => Jlt,
-            0x13 => Jge,
-            0x14 => Jle,
-            0x15 => Jnz,
-            0x16 => Jz,
+            0x31 => Jmp,
+            0x32 => Jeq,
+            0x33 => Jne,
+            0x34 => Jgt,
+            0x35 => Jlt,
+            0x36 => Jge,
+            0x37 => Jle,
+            0x38 => Jnz,
+            0x39 => Jz,
 
             // Stack
-            0x17 => Psh,
-            0x18 => Pop,
-            0x19 => Dup,
-            0x1A => Swp,
-            0x1B => Clr,
-            0x1C => Ret,
-            0x1D => Cal,
+            0x41 => Psh,
+            0x42 => Pop,
+            0x43 => Dup,
+            0x44 => Swp,
+            0x45 => Clr,
+            0x46 => Ret,
+            0x47 => Cal,
 
             _ => panic!("Invalid opcode: {0:#x}", opcode),
         }

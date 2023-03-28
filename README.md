@@ -50,7 +50,7 @@ The Slang VM supports the following opcodes:
 
 | Opcode | Description  | Size  | Code   | Modes  |
 | ------ | ------------ | ----- | ------ | ------ |
-| `NOP`  | No operation | 8-bit | `0x00` | `NULL` |
+| `NOP`  | No operation | 8-bit | `0xFF` | `NULL` |
 
 | Opcode | Description | Size  | Code   | Modes                                                                     |
 | ------ | ----------- | ----- | ------ | ------------------------------------------------------------------------- |
@@ -60,41 +60,43 @@ The Slang VM supports the following opcodes:
 
 | Opcode | Description | Size  | Code   | Modes                              |
 | ------ | ----------- | ----- | ------ | ---------------------------------- |
-| `ADD`  | Add         | 8-bit | `0x04` | `IMM->REG`, `REG->REG`, `MEM->REG` |
-| `SUB`  | Subtract    | 8-bit | `0x05` | `IMM->REG`, `REG->REG`, `MEM->REG` |
-| `MUL`  | Multiply    | 8-bit | `0x06` | `IMM->REG`, `REG->REG`, `MEM->REG` |
-| `DIV`  | Divide      | 8-bit | `0x07` | `IMM->REG`, `REG->REG`, `MEM->REG` |
+| `ADD`  | Add         | 8-bit | `0x11` | `IMM->REG`, `REG->REG`, `MEM->REG` |
+| `SUB`  | Subtract    | 8-bit | `0x12` | `IMM->REG`, `REG->REG`, `MEM->REG` |
+| `MUL`  | Multiply    | 8-bit | `0x13` | `IMM->REG`, `REG->REG`, `MEM->REG` |
+| `DIV`  | Divide      | 8-bit | `0x14` | `IMM->REG`, `REG->REG`, `MEM->REG` |
+| `INC`  | Increment   | 8-bit | `0x15` | `REG`, `MEM`                       |
+| `DEC`  | Decrement   | 8-bit | `0x16` | `REG`, `MEM`                       |
 
 | Opcode | Description         | Size  | Code   | Modes                  |
 | ------ | ------------------- | ----- | ------ | ---------------------- |
-| `AND`  | Bitwise And         | 8-bit | `0x08` | `REG->IMM`, `REG->REG` |
-| `OR`   | Bitwise Or          | 8-bit | `0x09` | `REG->IMM`, `REG->REG` |
-| `XOR`  | Bitwise Xor         | 8-bit | `0x0A` | `REG->IMM`, `REG->REG` |
-| `NOT`  | Bitwise Not         | 8-bit | `0x0B` | `REGISTER`, `MEMORY`   |
-| `SHL`  | Bitwise Shift left  | 8-bit | `0x0C` | `REG->IMM`, `REG->REG` |
-| `SHR`  | Bitwise Shift right | 8-bit | `0x0D` | `REG->IMM`, `REG->REG` |
+| `AND`  | Bitwise And         | 8-bit | `0x21` | `REG->IMM`, `REG->REG` |
+| `OR`   | Bitwise Or          | 8-bit | `0x22` | `REG->IMM`, `REG->REG` |
+| `XOR`  | Bitwise Xor         | 8-bit | `0x23` | `REG->IMM`, `REG->REG` |
+| `NOT`  | Bitwise Not         | 8-bit | `0x24` | `REG`, `MEM`           |
+| `SHL`  | Bitwise Shift left  | 8-bit | `0x25` | `REG->IMM`, `REG->REG` |
+| `SHR`  | Bitwise Shift right | 8-bit | `0x26` | `REG->IMM`, `REG->REG` |
 
-| Opcode | Description                      | Size  | Code   | Modes                 |
-| ------ | -------------------------------- | ----- | ------ | --------------------- |
-| `JMP`  | Jump to addr                     | 8-bit | `0x0E` | `REGISTER`, `LITERAL` |
-| `JEQ`  | Jump if equal                    | 8-bit | `0x0F` | `REGISTER`, `LITERAL` |
-| `JNE`  | Jump if not equal                | 8-bit | `0x10` | `REGISTER`, `LITERAL` |
-| `JGT`  | Jump if greater than             | 8-bit | `0x11` | `REGISTER`, `LITERAL` |
-| `JLT`  | Jump if less than                | 8-bit | `0x12` | `REGISTER`, `LITERAL` |
-| `JGE`  | Jump if greater than or equal to | 8-bit | `0x13` | `REGISTER`, `LITERAL` |
-| `JLE`  | Jump if less than or equal to    | 8-bit | `0x14` | `REGISTER`, `LITERAL` |
-| `JNZ`  | Jump if not zero                 | 8-bit | `0x15` | `REGISTER`, `LITERAL` |
-| `JZ`   | Jump if zero                     | 8-bit | `0x16` | `REGISTER`, `LITERAL` |
+| Opcode | Description                      | Size  | Code   | Modes        |
+| ------ | -------------------------------- | ----- | ------ | ------------ |
+| `JMP`  | Jump to addr                     | 8-bit | `0x31` | `REG`, `IMM` |
+| `JEQ`  | Jump if equal                    | 8-bit | `0x32` | `REG`, `IMM` |
+| `JNE`  | Jump if not equal                | 8-bit | `0x33` | `REG`, `IMM` |
+| `JGT`  | Jump if greater than             | 8-bit | `0x34` | `REG`, `IMM` |
+| `JLT`  | Jump if less than                | 8-bit | `0x35` | `REG`, `IMM` |
+| `JGE`  | Jump if greater than or equal to | 8-bit | `0x36` | `REG`, `IMM` |
+| `JLE`  | Jump if less than or equal to    | 8-bit | `0x37` | `REG`, `IMM` |
+| `JNZ`  | Jump if not zero                 | 8-bit | `0x38` | `REG`, `IMM` |
+| `JZ`   | Jump if zero                     | 8-bit | `0x39` | `REG`, `IMM` |
 
-| Opcode | Description            | Size  | Code   | Modes                 |
-| ------ | ---------------------- | ----- | ------ | --------------------- |
-| `PSH`  | Push to top of stack   | 8-bit | `0x17` | `REGISTER`, `LITERAL` |
-| `POP`  | Pop from top of stack  | 8-bit | `0x18` | `REGISTER`, `NULL`    |
-| `DUP`  | Duplicate top of stack | 8-bit | `0x19` | `NULL`                |
-| `SWP`  | Swap top of stack      | 8-bit | `0x1A` | `NULL`                |
-| `CLR`  | Clear stack            | 8-bit | `0x1B` | `NULL`                |
-| `RET`  | Return from subroutine | 8-bit | `0x1C` | `NULL`                |
-| `CAL`  | Call subroutine        | 8-bit | `0x1D` | `NULL`                |
+| Opcode | Description            | Size  | Code   | Modes         |
+| ------ | ---------------------- | ----- | ------ | ------------- |
+| `PSH`  | Push to top of stack   | 8-bit | `0x41` | `REG`, `IMM`  |
+| `POP`  | Pop from top of stack  | 8-bit | `0x42` | `REG`, `NULL` |
+| `DUP`  | Duplicate top of stack | 8-bit | `0x43` | `NULL`        |
+| `SWP`  | Swap top of stack      | 8-bit | `0x44` | `NULL`        |
+| `CLR`  | Clear stack            | 8-bit | `0x45` | `NULL`        |
+| `RET`  | Return from subroutine | 8-bit | `0x46` | `NULL`        |
+| `CAL`  | Call subroutine        | 8-bit | `0x47` | `NULL`        |
 
 ## Addressing Modes
 
@@ -111,9 +113,9 @@ The Slang VM supports the following addressing modes:
 | `MEM->REG` | Memory to register    | 8-bit | `0x50` | 64-bit -> 8-bit  |
 | `MEM->MEM` | Memory to memory      | 8-bit | `0x60` | 64-bit -> 64-bit |
 |            |                       |       |        |                  |
-| `LITERAL`  | Literals              | 8-bit | `0x70` | 64-bit           |
-| `REGISTER` | Registers             | 8-bit | `0x80` | 8-bit            |
-| `MEMORY`   | Memory                | 8-bit | `0x90` | 64-bit           |
+| `IMML`     | Literals              | 8-bit | `0x70` | 64-bit           |
+| `REG`      | Registers             | 8-bit | `0x80` | 8-bit            |
+| `MEM`      | Memory                | 8-bit | `0x90` | 64-bit           |
 | `NULL`     | No operand            | 8-bit | `0xA0` | -                |
 
 ## Bytecode Format
