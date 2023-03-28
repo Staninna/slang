@@ -1,3 +1,5 @@
+// TODO inport * form Register, Opcode, AddrMode, Operand
+
 use crate::{
     devices::{
         device::{Device64Bit, Device8Bit},
@@ -126,12 +128,12 @@ impl Cpu {
         }
     }
 
-    // TODO: Add the frame pointer and frame size stuff
-
     // Push the state of the CPU to the stack
     fn push_state(&mut self) {
         use Operand::*;
         use Register::*;
+
+        // Push the registers
         self.psh((Reg(Ip as u8), Null));
         self.psh((Reg(R1 as u8), Null));
         self.psh((Reg(R2 as u8), Null));
@@ -141,12 +143,32 @@ impl Cpu {
         self.psh((Reg(R6 as u8), Null));
         self.psh((Reg(R7 as u8), Null));
         self.psh((Reg(R8 as u8), Null));
+
+        // Push the stack frame size
+        self.psh((Reg(Fs as u8), Null));
+        self.write_reg(Fs, 0);
+
+        // Write the new frame pointer
+        let sp = self.read_reg(Sp);
+        self.write_reg(Fp, sp);
     }
 
     // Pop the state of the CPU from the stack
     fn pop_state(&mut self) {
         use Operand::*;
         use Register::*;
+
+        fn pop_ret(cpu: &mut Cpu) -> u64 {
+            let sp = cpu.read_reg(Sp);
+            let ret = cpu.ram.read64(sp);
+            cpu.write_reg(Sp, sp + std::mem::size_of::<u64>() as u64);
+            ret
+        }
+
+        // Pop the stack frame size
+        self.pop((Reg(Fs as u8), Null));
+
+        // Pop the registers
         self.pop((Reg(R8 as u8), Null));
         self.pop((Reg(R7 as u8), Null));
         self.pop((Reg(R6 as u8), Null));
@@ -156,9 +178,17 @@ impl Cpu {
         self.pop((Reg(R2 as u8), Null));
         self.pop((Reg(R1 as u8), Null));
         self.pop((Reg(Ip as u8), Null));
-    }
 
-    // end TODO
+        // Remove arguments from the stack
+        let num_args = pop_ret(self);
+        for _ in 0..num_args {
+            pop_ret(self);
+        }
+
+        // Reset frame pointer
+        let fs = self.read_reg(Fs);
+        self.write_reg(Fp, fs + self.read_reg(Fp));
+    }
 
     // Execute an instruction
     fn execute(&mut self, instr: Instruction) {
@@ -777,6 +807,7 @@ impl Cpu {
                 let sp = self.read_reg(Sp);
                 self.ram.write64(sp, imm);
                 self.write_reg(Sp, sp - std::mem::size_of::<u64>() as u64);
+                self.write_reg(Fs, self.read_reg(Fs) + std::mem::size_of::<u64>() as u64);
             }
             // Reg -> Stack
             (Reg(reg), _) => {
@@ -785,6 +816,7 @@ impl Cpu {
                 let data = self.read_reg(reg);
                 self.ram.write64(sp, data);
                 self.write_reg(Sp, sp - std::mem::size_of::<u64>() as u64);
+                self.write_reg(Fs, self.read_reg(Fs) + std::mem::size_of::<u64>() as u64);
             }
             _ => panic!("Invalid operands for psh instruction"),
         }
@@ -802,11 +834,13 @@ impl Cpu {
                 let data = self.ram.read64(sp);
                 self.write_reg(reg, data);
                 self.write_reg(Sp, sp + std::mem::size_of::<u64>() as u64);
+                self.write_reg(Fs, self.read_reg(Fs) - std::mem::size_of::<u64>() as u64);
             }
             // Null
             (Null, Null) => {
                 let sp = self.read_reg(Sp);
                 self.write_reg(Sp, sp + std::mem::size_of::<u64>() as u64);
+                self.write_reg(Fs, self.read_reg(Fs) - std::mem::size_of::<u64>() as u64);
             }
             _ => panic!("Invalid operands for pop instruction"),
         }
