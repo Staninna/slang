@@ -94,16 +94,16 @@ impl From<u8> for Opcode {
 }
 
 pub enum AddrMode {
-    Null = 0x00,
-    RegToReg = 0x10,
-    RegToMem = 0x20,
-    ImmToReg = 0x30,
-    ImmToMem = 0x40,
+    ImmToReg = 0x10,
+    ImmToMem = 0x20,
+    RegToReg = 0x30,
+    RegToMem = 0x40,
     MemToReg = 0x50,
     MemToMem = 0x60,
     Literal = 0x70,
     Register = 0x80,
     Memory = 0x90,
+    Null = 0xA0,
 }
 
 impl From<u8> for AddrMode {
