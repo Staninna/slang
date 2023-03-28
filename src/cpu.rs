@@ -31,6 +31,9 @@ impl Cpu {
             regs_addr_map.insert(name.to_string(), (i * std::mem::size_of::<u64>()) as u64);
         }
 
+        // Set the stack pointer to the end of the memory
+        regs.write(*regs_addr_map.get("sp").unwrap(), mem_size as u64);
+
         // Return the CPU
         Self {
             regs,
