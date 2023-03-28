@@ -176,46 +176,6 @@ impl Cpu {
         }
     }
 
-    // Push to stack
-    fn psh(&mut self, operands: (Operand, Operand)) {
-        use Operand::*;
-        use Register::*;
-        match operands {
-            // Imm -> Stack
-            (Imm(imm), Null) => {
-                let sp = self.read_reg(Sp);
-                self.ram.write64(sp, imm);
-                self.write_reg(Sp, sp - std::mem::size_of::<u64>() as u64);
-            }
-            // Reg -> Stack
-            (Reg(reg), _) => {
-                let sp = self.read_reg(Sp);
-                let reg = self.index_reg(reg);
-                let data = self.read_reg(reg);
-                self.ram.write64(sp, data);
-                self.write_reg(Sp, sp - std::mem::size_of::<u64>() as u64);
-            }
-            _ => panic!("Invalid operands for psh instruction"),
-        }
-    }
-
-    // Pop from stack
-    fn pop(&mut self, operands: (Operand, Operand)) {
-        use Operand::*;
-        use Register::*;
-        match operands {
-            // Stack -> Reg
-            (Reg(reg), Null) => {
-                let sp = self.read_reg(Sp);
-                let reg = self.index_reg(reg);
-                let data = self.ram.read64(sp);
-                self.write_reg(reg, data);
-                self.write_reg(Sp, sp + std::mem::size_of::<u64>() as u64);
-            }
-            _ => panic!("Invalid operands for pop instruction"),
-        }
-    }
-
     // Move
     fn mov(&mut self, operands: (Operand, Operand)) {
         use Operand::*;
@@ -770,6 +730,46 @@ impl Cpu {
                 }
             }
             _ => panic!("Invalid operands for jz instruction"),
+        }
+    }
+
+    // Push to stack
+    fn psh(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Imm -> Stack
+            (Imm(imm), Null) => {
+                let sp = self.read_reg(Sp);
+                self.ram.write64(sp, imm);
+                self.write_reg(Sp, sp - std::mem::size_of::<u64>() as u64);
+            }
+            // Reg -> Stack
+            (Reg(reg), _) => {
+                let sp = self.read_reg(Sp);
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                self.ram.write64(sp, data);
+                self.write_reg(Sp, sp - std::mem::size_of::<u64>() as u64);
+            }
+            _ => panic!("Invalid operands for psh instruction"),
+        }
+    }
+
+    // Pop from stack
+    fn pop(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Stack -> Reg
+            (Reg(reg), Null) => {
+                let sp = self.read_reg(Sp);
+                let reg = self.index_reg(reg);
+                let data = self.ram.read64(sp);
+                self.write_reg(reg, data);
+                self.write_reg(Sp, sp + std::mem::size_of::<u64>() as u64);
+            }
+            _ => panic!("Invalid operands for pop instruction"),
         }
     }
 }
