@@ -16,11 +16,14 @@ The Slang VM features a 64-bit stack that grows downwards. The stack pointer (`S
 
 ## Registers
 
-The Slang VM has 11 registers, including 8 general-purpose registers (R1-R8) and 3 special-purpose registers (ACC, IP, SP). The special-purpose registers have specific purposes:
+The Slang VM has 14 registers, including 8 general-purpose registers (R1-R8) and 3 special-purpose registers (ACC, IP, SP, FP, FS, AC). With the following purposes:
 
 - `ACC`: is the accumulator register, which is used to store the result some operations
 - `IP`: Instruction pointer for storing the address of the next instruction to be executed
 - `SP`: Stack pointer for storing the address of the top of the stack
+- `FP`: Frame pointer for storing the address of the top of the current stack frame
+- `FS`: Frame size for storing the size of the current stack frame
+- `AC`: Argument count for storing the number of arguments passed to a subroutine (Related to the stack frame)
 
 Here's a table of the Slang VM registers:
 
@@ -123,6 +126,6 @@ The format of the bytecode is as follows:
 
 ## Maybe in the future
 
--   Call stack
--   Memory management (GC/Heap)
--   Virtual file system
+- Call stack
+- Memory management (GC/Heap)
+- Virtual file system
