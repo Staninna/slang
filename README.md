@@ -112,3 +112,9 @@ The format of the bytecode is as follows:
 | Opcode | Addressing Mode | Operand                            | Operand                            |
 | ------ | --------------- | ---------------------------------- | ---------------------------------- |
 | 8-bit  | 8-bit           | 64-bit (8 bytes) OR 8-bit (1 byte) | 64-bit (8 bytes) OR 8-bit (1 byte) |
+
+## Maybe in the future
+
+* Call stack
+* Memory management (GC/Heap)
+* Virtual file system
