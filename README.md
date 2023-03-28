@@ -16,13 +16,11 @@ The Slang VM features a 64-bit stack that grows downwards. The stack pointer (`S
 
 ## Registers
 
-The Slang VM has 13 registers, including 8 general-purpose registers (R1-R8) and 5 special-purpose registers (ACC, IP, SP, BP, RA). The special-purpose registers have specific purposes:
+The Slang VM has 11 registers, including 8 general-purpose registers (R1-R8) and 3 special-purpose registers (ACC, IP, SP). The special-purpose registers have specific purposes:
 
 - `ACC`: is the accumulator register, which is used to store the result some operations
 - `IP`: Instruction pointer for storing the address of the next instruction to be executed
 - `SP`: Stack pointer for storing the address of the top of the stack
-- `BP`: Base pointer for storing the address of the base of the stack
-- `RA`: Return address for storing the address of the next instruction to be executed after a subroutine call is returned
 
 Here's a table of the Slang VM registers:
 
@@ -31,16 +29,14 @@ Here's a table of the Slang VM registers:
 | `ACC`    | Accumulator         | 64-bit | `0x01` | `0x00`                       |
 | `IP`     | Instruction pointer | 64-bit | `0x02` | `0x00`                       |
 | `SP`     | Stack pointer       | 64-bit | `0x03` | Dynamic based on memory size |
-| `FS`     | Frame size          | 64-bit | `0x04` | `0x00`                       |
-| `FP`     | Frame pointer       | 64-bit | `0x05` | `0x00`                       |
-| `R1`     | Register 1          | 64-bit | `0x06` | `0x00`                       |
-| `R2`     | Register 2          | 64-bit | `0x07` | `0x00`                       |
-| `R3`     | Register 3          | 64-bit | `0x08` | `0x00`                       |
-| `R4`     | Register 4          | 64-bit | `0x09` | `0x00`                       |
-| `R5`     | Register 5          | 64-bit | `0x0A` | `0x00`                       |
-| `R6`     | Register 6          | 64-bit | `0x0B` | `0x00`                       |
-| `R7`     | Register 7          | 64-bit | `0x0C` | `0x00`                       |
-| `R8`     | Register 8          | 64-bit | `0x0D` | `0x00`                       |
+| `R1`     | Register 1          | 64-bit | `0x04` | `0x00`                       |
+| `R2`     | Register 2          | 64-bit | `0x05` | `0x00`                       |
+| `R3`     | Register 3          | 64-bit | `0x06` | `0x00`                       |
+| `R4`     | Register 4          | 64-bit | `0x07` | `0x00`                       |
+| `R5`     | Register 5          | 64-bit | `0x08` | `0x00`                       |
+| `R6`     | Register 6          | 64-bit | `0x09` | `0x00`                       |
+| `R7`     | Register 7          | 64-bit | `0x0A` | `0x00`                       |
+| `R8`     | Register 8          | 64-bit | `0x0B` | `0x00`                       |
 
 ## Opcodes
 
@@ -124,6 +120,6 @@ The format of the bytecode is as follows:
 
 ## Maybe in the future
 
-- Call stack
-- Memory management (GC/Heap)
-- Virtual file system
+-   Call stack
+-   Memory management (GC/Heap)
+-   Virtual file system
