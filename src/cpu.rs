@@ -168,8 +168,8 @@ impl Cpu {
             // Stack
             Psh => self.psh(operands),
             Pop => self.pop(operands),
-            Dup => todo!(),
-            Swp => todo!(),
+            Dup => self.dup(operands),
+            Swp => self.swp(operands),
             Clr => todo!(),
             Ret => todo!(),
             Cal => todo!(),
@@ -770,6 +770,41 @@ impl Cpu {
                 self.write_reg(Sp, sp + std::mem::size_of::<u64>() as u64);
             }
             _ => panic!("Invalid operands for pop instruction"),
+        }
+    }
+
+    // Duplicate top of stack
+    fn dup(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Stack -> Stack
+            (Null, Null) => {
+                let sp = self.read_reg(Sp);
+                let data = self.ram.read64(sp);
+                self.ram
+                    .write64(sp - std::mem::size_of::<u64>() as u64, data);
+                self.write_reg(Sp, sp - std::mem::size_of::<u64>() as u64);
+            }
+            _ => panic!("Invalid operands for dup instruction"),
+        }
+    }
+
+    // Swap top two elements of stack
+    fn swp(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Stack -> Stack
+            (Null, Null) => {
+                let sp = self.read_reg(Sp);
+                let data1 = self.ram.read64(sp);
+                let data2 = self.ram.read64(sp + std::mem::size_of::<u64>() as u64);
+                self.ram.write64(sp, data2);
+                self.ram
+                    .write64(sp + std::mem::size_of::<u64>() as u64, data1);
+            }
+            _ => panic!("Invalid operands for swp instruction"),
         }
     }
 }
