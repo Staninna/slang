@@ -161,6 +161,15 @@ impl Cpu {
             Jle => self.jle(operands),
             Jnz => self.jnz(operands),
             Jz => self.jz(operands),
+
+            // Stack
+            Psh => todo!(),
+            Pop => todo!(),
+            Dup => todo!(),
+            Swp => todo!(),
+            Clr => todo!(),
+            Ret => todo!(),
+            Cal => todo!(),
         }
     }
 

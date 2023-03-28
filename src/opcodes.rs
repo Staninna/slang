@@ -31,6 +31,15 @@ pub enum Opcode {
     Jle = 0x14,
     Jnz = 0x15,
     Jz = 0x16,
+
+    // Stack
+    Psh = 0x17,
+    Pop = 0x18,
+    Dup = 0x19,
+    Swp = 0x1A,
+    Clr = 0x1B,
+    Ret = 0x1C,
+    Cal = 0x1D,
 }
 
 impl From<u8> for Opcode {
@@ -69,6 +78,15 @@ impl From<u8> for Opcode {
             0x14 => Jle,
             0x15 => Jnz,
             0x16 => Jz,
+
+            // Stack
+            0x17 => Psh,
+            0x18 => Pop,
+            0x19 => Dup,
+            0x1A => Swp,
+            0x1B => Clr,
+            0x1C => Ret,
+            0x1D => Cal,
 
             _ => panic!("Invalid opcode: {0:#x}", opcode),
         }

@@ -41,9 +41,9 @@ Miscellaneous operations:
 
 | Opcode | Description | Size  | Code   | Modes                                                                     |
 | ------ | ----------- | ----- | ------ | ------------------------------------------------------------------------- |
-| `MOV`  | Move        | 8-bit | `0x01` | `IMM->REG`, `IMM->MEM`, `REG->REG`,<br>`REG->MEM`, `MEM->REG`, `MEM->MEM` |
-| `LOD`  | Load        | 8-bit | `0x02` | `IMM->REG`, `MEM->REG`                                                    |
-| `STR`  | Store       | 8-bit | `0x03` | `IMM->MEM`, `REG->MEM`, `MEM->MEM`                                        |
+| `MOV`  | Move Data   | 8-bit | `0x01` | `IMM->REG`, `IMM->MEM`, `REG->REG`,<br>`REG->MEM`, `MEM->REG`, `MEM->MEM` |
+| `LOD`  | Load Data   | 8-bit | `0x02` | `IMM->REG`, `MEM->REG`                                                    |
+| `STR`  | Store Data  | 8-bit | `0x03` | `IMM->MEM`, `REG->MEM`, `MEM->MEM`                                        |
 
 | Opcode | Description | Size  | Code   | Modes                              |
 | ------ | ----------- | ----- | ------ | ---------------------------------- |
@@ -52,14 +52,14 @@ Miscellaneous operations:
 | `MUL`  | Multiply    | 8-bit | `0x06` | `IMM->REG`, `REG->REG`, `MEM->REG` |
 | `DIV`  | Divide      | 8-bit | `0x07` | `IMM->REG`, `REG->REG`, `MEM->REG` |
 
-| Opcode | Description | Size  | Code   | Modes                  |
-| ------ | ----------- | ----- | ------ | ---------------------- |
-| `AND`  | And         | 8-bit | `0x08` | `REG->IMM`, `REG->REG` |
-| `OR`   | Or          | 8-bit | `0x09` | `REG->IMM`, `REG->REG` |
-| `XOR`  | Xor         | 8-bit | `0x0A` | `REG->IMM`, `REG->REG` |
-| `NOT`  | Not         | 8-bit | `0x0B` | `REGISTER`, `MEMORY`   |
-| `SHL`  | Shift left  | 8-bit | `0x0C` | `REG->IMM`, `REG->REG` |
-| `SHR`  | Shift right | 8-bit | `0x0D` | `REG->IMM`, `REG->REG` |
+| Opcode | Description         | Size  | Code   | Modes                  |
+| ------ | ------------------- | ----- | ------ | ---------------------- |
+| `AND`  | Bitwise And         | 8-bit | `0x08` | `REG->IMM`, `REG->REG` |
+| `OR`   | Bitwise Or          | 8-bit | `0x09` | `REG->IMM`, `REG->REG` |
+| `XOR`  | Bitwise Xor         | 8-bit | `0x0A` | `REG->IMM`, `REG->REG` |
+| `NOT`  | Bitwise Not         | 8-bit | `0x0B` | `REGISTER`, `MEMORY`   |
+| `SHL`  | Bitwise Shift left  | 8-bit | `0x0C` | `REG->IMM`, `REG->REG` |
+| `SHR`  | Bitwise Shift right | 8-bit | `0x0D` | `REG->IMM`, `REG->REG` |
 
 | Opcode | Description                      | Size  | Code   | Modes                 |
 | ------ | -------------------------------- | ----- | ------ | --------------------- |
@@ -72,6 +72,16 @@ Miscellaneous operations:
 | `JLE`  | Jump if less than or equal to    | 8-bit | `0x14` | `REGISTER`, `LITERAL` |
 | `JNZ`  | Jump if not zero                 | 8-bit | `0x15` | `REGISTER`, `LITERAL` |
 | `JZ`   | Jump if zero                     | 8-bit | `0x16` | `REGISTER`, `LITERAL` |
+
+| Opcode | Description            | Size  | Code   | Modes |
+| ------ | ---------------------- | ----- | ------ | ----- |
+| `PSH`  | Push to top of stack   | 8-bit | `0x17` | -     |
+| `POP`  | Pop from top of stack  | 8-bit | `0x18` | -     |
+| `DUP`  | Duplicate top of stack | 8-bit | `0x19` | -     |
+| `SWP`  | Swap top of stack      | 8-bit | `0x1A` | -     |
+| `CLR`  | Clear stack            | 8-bit | `0x1B` | -     |
+| `RET`  | Return from subroutine | 8-bit | `0x1C` | -     |
+| `CAL`  | Call subroutine        | 8-bit | `0x1D` | -     |
 
 ## Addressing Modes
 
