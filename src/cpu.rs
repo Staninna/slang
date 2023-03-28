@@ -23,7 +23,7 @@ impl Cpu {
         let regs_names = Register::all();
 
         // Make a register memory buffer
-        let regs = Registers::new(regs_names.len() * std::mem::size_of::<u64>());
+        let mut regs = Registers::new(regs_names.len() * std::mem::size_of::<u64>());
 
         // Make a register map
         let mut regs_addr_map = HashMap::new();
@@ -163,13 +163,53 @@ impl Cpu {
             Jz => self.jz(operands),
 
             // Stack
-            Psh => todo!(),
-            Pop => todo!(),
+            Psh => self.psh(operands),
+            Pop => self.pop(operands),
             Dup => todo!(),
             Swp => todo!(),
             Clr => todo!(),
             Ret => todo!(),
             Cal => todo!(),
+        }
+    }
+
+    // Push to stack
+    fn psh(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Imm -> Stack
+            (Imm(imm), Null) => {
+                let sp = self.read_reg(Sp);
+                self.ram.write64(sp, imm);
+                self.write_reg(Sp, sp - std::mem::size_of::<u64>() as u64);
+            }
+            // Reg -> Stack
+            (Reg(reg), _) => {
+                let sp = self.read_reg(Sp);
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                self.ram.write64(sp, data);
+                self.write_reg(Sp, sp - std::mem::size_of::<u64>() as u64);
+            }
+            _ => panic!("Invalid operands for psh instruction"),
+        }
+    }
+
+    // Pop from stack
+    fn pop(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Stack -> Reg
+            (Reg(reg), Null) => {
+                let sp = self.read_reg(Sp);
+                let reg = self.index_reg(reg);
+                let data = self.ram.read64(sp);
+                self.write_reg(reg, data);
+                self.write_reg(Sp, sp + std::mem::size_of::<u64>() as u64);
+            }
+            _ => panic!("Invalid operands for pop instruction"),
         }
     }
 
