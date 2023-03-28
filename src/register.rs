@@ -3,22 +3,23 @@ pub enum Register {
     Acc = 0x01, // Accumulator
     Ip = 0x02,  // Instruction pointer
     Sp = 0x03,  // Stack pointer
-    Bp = 0x04,  // Base pointer
-    Ra = 0x05,  // Return address
-    R1 = 0x06,  // General purpose register
-    R2 = 0x07,  // General purpose register
-    R3 = 0x08,  // General purpose register
-    R4 = 0x09,  // General purpose register
-    R5 = 0x0A,  // General purpose register
-    R6 = 0x0B,  // General purpose register
-    R7 = 0x0C,  // General purpose register
-    R8 = 0x0D,  // General purpose register
+    Fp = 0x04,  // Frame pointer
+    Bp = 0x05,  // Base pointer
+    Ra = 0x06,  // Return address
+    R1 = 0x07,  // General purpose register
+    R2 = 0x08,  // General purpose register
+    R3 = 0x09,  // General purpose register
+    R4 = 0x0A,  // General purpose register
+    R5 = 0x0B,  // General purpose register
+    R6 = 0x0C,  // General purpose register
+    R7 = 0x0D,  // General purpose register
+    R8 = 0x0E,  // General purpose register
 }
 
 impl Register {
     pub fn all() -> Vec<Register> {
         use Register::*;
-        vec![Acc, Ip, Sp, Bp, Ra, R1, R2, R3, R4, R5, R6, R7, R8]
+        vec![Acc, Ip, Sp, Fp, Bp, Ra, R1, R2, R3, R4, R5, R6, R7, R8]
     }
 }
 
@@ -29,6 +30,7 @@ impl ToString for Register {
             Acc => "acc".to_string(),
             Ip => "ip".to_string(),
             Sp => "sp".to_string(),
+            Fp => "fp".to_string(),
             Bp => "bp".to_string(),
             Ra => "ra".to_string(),
             R1 => "r1".to_string(),
@@ -50,6 +52,7 @@ impl From<&str> for Register {
             "acc" => Acc,
             "ip" => Ip,
             "sp" => Sp,
+            "fp" => Fp,
             "bp" => Bp,
             "ra" => Ra,
             "r1" => R1,
