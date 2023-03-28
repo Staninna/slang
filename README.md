@@ -20,14 +20,17 @@ Here's a table of the Slang VM registers:
 | -------- | ------------------- | ------ | ------ | ------------- |
 | `ACC`    | Accumulator         | 64-bit | `0x01` | `0x00`        |
 | `IP`     | Instruction pointer | 64-bit | `0x02` | `0x00`        |
-| `R1`     | Register 1          | 64-bit | `0x03` | `0x00`        |
-| `R2`     | Register 2          | 64-bit | `0x04` | `0x00`        |
-| `R3`     | Register 3          | 64-bit | `0x05` | `0x00`        |
-| `R4`     | Register 4          | 64-bit | `0x06` | `0x00`        |
-| `R5`     | Register 5          | 64-bit | `0x07` | `0x00`        |
-| `R6`     | Register 6          | 64-bit | `0x08` | `0x00`        |
-| `R7`     | Register 7          | 64-bit | `0x09` | `0x00`        |
-| `R8`     | Register 8          | 64-bit | `0x0A` | `0x00`        |
+| `SP`     | Stack pointer       | 64-bit | `0x03` | `0x00`        |
+| `BP`     | Base pointer        | 64-bit | `0x04` | `0x00`        |
+| `RA`     | Return address      | 64-bit | `0x05` | `0x00`        |
+| `R1`     | Register 1          | 64-bit | `0x06` | `0x00`        |
+| `R2`     | Register 2          | 64-bit | `0x07` | `0x00`        |
+| `R3`     | Register 3          | 64-bit | `0x08` | `0x00`        |
+| `R4`     | Register 4          | 64-bit | `0x09` | `0x00`        |
+| `R5`     | Register 5          | 64-bit | `0x0A` | `0x00`        |
+| `R6`     | Register 6          | 64-bit | `0x0B` | `0x00`        |
+| `R7`     | Register 7          | 64-bit | `0x0C` | `0x00`        |
+| `R8`     | Register 8          | 64-bit | `0x0D` | `0x00`        |
 
 ## Opcodes
 
