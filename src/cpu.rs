@@ -126,6 +126,8 @@ impl Cpu {
         }
     }
 
+    // TODO: Add the frame pointer and frame size stuff
+
     // Push the state of the CPU to the stack
     fn push_state(&mut self) {
         use Operand::*;
@@ -155,6 +157,8 @@ impl Cpu {
         self.pop((Reg(R1 as u8), Null));
         self.pop((Reg(Ip as u8), Null));
     }
+
+    // end TODO
 
     // Execute an instruction
     fn execute(&mut self, instr: Instruction) {
@@ -797,6 +801,11 @@ impl Cpu {
                 let reg = self.index_reg(reg);
                 let data = self.ram.read64(sp);
                 self.write_reg(reg, data);
+                self.write_reg(Sp, sp + std::mem::size_of::<u64>() as u64);
+            }
+            // Null
+            (Null, Null) => {
+                let sp = self.read_reg(Sp);
                 self.write_reg(Sp, sp + std::mem::size_of::<u64>() as u64);
             }
             _ => panic!("Invalid operands for pop instruction"),
