@@ -126,6 +126,36 @@ impl Cpu {
         }
     }
 
+    // Push the state of the CPU to the stack
+    fn push_state(&mut self) {
+        use Operand::*;
+        use Register::*;
+        self.psh((Reg(Ip as u8), Null));
+        self.psh((Reg(R1 as u8), Null));
+        self.psh((Reg(R2 as u8), Null));
+        self.psh((Reg(R3 as u8), Null));
+        self.psh((Reg(R4 as u8), Null));
+        self.psh((Reg(R5 as u8), Null));
+        self.psh((Reg(R6 as u8), Null));
+        self.psh((Reg(R7 as u8), Null));
+        self.psh((Reg(R8 as u8), Null));
+    }
+
+    // Pop the state of the CPU from the stack
+    fn pop_state(&mut self) {
+        use Operand::*;
+        use Register::*;
+        self.pop((Reg(R8 as u8), Null));
+        self.pop((Reg(R7 as u8), Null));
+        self.pop((Reg(R6 as u8), Null));
+        self.pop((Reg(R5 as u8), Null));
+        self.pop((Reg(R4 as u8), Null));
+        self.pop((Reg(R3 as u8), Null));
+        self.pop((Reg(R2 as u8), Null));
+        self.pop((Reg(R1 as u8), Null));
+        self.pop((Reg(Ip as u8), Null));
+    }
+
     // Execute an instruction
     fn execute(&mut self, instr: Instruction) {
         let (opcode, _, operands) = instr.unpack();
@@ -171,8 +201,8 @@ impl Cpu {
             Dup => self.dup(operands),
             Swp => self.swp(operands),
             Clr => self.clr(operands),
-            Ret => todo!(),
-            Cal => todo!(),
+            Ret => self.ret(operands),
+            Cal => self.cal(operands),
         }
     }
 
@@ -818,6 +848,39 @@ impl Cpu {
                 self.write_reg(Sp, self.ram.size() as u64);
             }
             _ => panic!("Invalid operands for clr instruction"),
+        }
+    }
+
+    // Return from subroutine
+    fn ret(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        match operands {
+            // Stack -> Stack
+            (Null, Null) => {
+                self.pop_state();
+            }
+            _ => panic!("Invalid operands for ret instruction"),
+        }
+    }
+
+    // Call a subroutine
+    fn cal(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Imm -> Stack
+            (Imm(imm), Null) => {
+                self.push_state();
+                self.write_reg(Ip, imm);
+            }
+            // Reg -> Stack
+            (Reg(reg), _) => {
+                self.push_state();
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                self.write_reg(Ip, data);
+            }
+            _ => panic!("Invalid operands for cal instruction"),
         }
     }
 }
