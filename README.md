@@ -84,15 +84,15 @@ The Slang VM supports the following opcodes:
 | `JNZ`  | Jump if not zero                 | 8-bit | `0x15` | `REGISTER`, `LITERAL` |
 | `JZ`   | Jump if zero                     | 8-bit | `0x16` | `REGISTER`, `LITERAL` |
 
-| Opcode | Description            | Size  | Code   | Modes |
-| ------ | ---------------------- | ----- | ------ | ----- |
-| `PSH`  | Push to top of stack   | 8-bit | `0x17` | -     |
-| `POP`  | Pop from top of stack  | 8-bit | `0x18` | -     |
-| `DUP`  | Duplicate top of stack | 8-bit | `0x19` | -     |
-| `SWP`  | Swap top of stack      | 8-bit | `0x1A` | -     |
-| `CLR`  | Clear stack            | 8-bit | `0x1B` | -     |
-| `RET`  | Return from subroutine | 8-bit | `0x1C` | -     |
-| `CAL`  | Call subroutine        | 8-bit | `0x1D` | -     |
+| Opcode | Description            | Size  | Code   | Modes                 |
+| ------ | ---------------------- | ----- | ------ | --------------------- |
+| `PSH`  | Push to top of stack   | 8-bit | `0x17` | `REGISTER`, `LITERAL` |
+| `POP`  | Pop from top of stack  | 8-bit | `0x18` | `REGISTER`            |
+| `DUP`  | Duplicate top of stack | 8-bit | `0x19` | -                     |
+| `SWP`  | Swap top of stack      | 8-bit | `0x1A` | -                     |
+| `CLR`  | Clear stack            | 8-bit | `0x1B` | -                     |
+| `RET`  | Return from subroutine | 8-bit | `0x1C` | -                     |
+| `CAL`  | Call subroutine        | 8-bit | `0x1D` | -                     |
 
 ## Addressing Modes
 
