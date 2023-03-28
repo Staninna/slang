@@ -170,7 +170,7 @@ impl Cpu {
             Pop => self.pop(operands),
             Dup => self.dup(operands),
             Swp => self.swp(operands),
-            Clr => todo!(),
+            Clr => self.clr(operands),
             Ret => todo!(),
             Cal => todo!(),
         }
@@ -805,6 +805,19 @@ impl Cpu {
                     .write64(sp + std::mem::size_of::<u64>() as u64, data1);
             }
             _ => panic!("Invalid operands for swp instruction"),
+        }
+    }
+
+    // Clear the whole stack
+    fn clr(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Stack -> Stack
+            (Null, Null) => {
+                self.write_reg(Sp, self.ram.size() as u64);
+            }
+            _ => panic!("Invalid operands for clr instruction"),
         }
     }
 }
