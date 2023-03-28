@@ -203,6 +203,8 @@ impl Cpu {
             Sub => self.sub(operands),
             Mul => self.mul(operands),
             Div => self.div(operands),
+            Inc => self.inc(operands),
+            Dec => self.dec(operands),
 
             // Bitwise
             And => self.and(operands),
@@ -434,6 +436,46 @@ impl Cpu {
                 self.write_reg(Accumulator, data / data2);
             }
             _ => panic!("Invalid operands for div instruction"),
+        }
+    }
+
+    // Increment
+    fn inc(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Reg
+            (Reg(reg), Null) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                self.write_reg(Accumulator, data + 1);
+            }
+            // Mem
+            (Mem(mem), Null) => {
+                let data = self.ram.read64(mem);
+                self.ram.write64(mem, data + 1);
+            }
+            _ => panic!("Invalid operands for inc instruction"),
+        }
+    }
+
+    // Decrement
+    fn dec(&mut self, operands: (Operand, Operand)) {
+        use Operand::*;
+        use Register::*;
+        match operands {
+            // Reg
+            (Reg(reg), Null) => {
+                let reg = self.index_reg(reg);
+                let data = self.read_reg(reg);
+                self.write_reg(Accumulator, data - 1);
+            }
+            // Mem
+            (Mem(mem), Null) => {
+                let data = self.ram.read64(mem);
+                self.ram.write64(mem, data - 1);
+            }
+            _ => panic!("Invalid operands for dec instruction"),
         }
     }
 
