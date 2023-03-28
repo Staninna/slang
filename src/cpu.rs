@@ -1,5 +1,3 @@
-// TODO inport * form Register, Opcode, AddrMode, Operand
-
 use crate::{
     devices::{
         device::{Device64Bit, Device8Bit},
