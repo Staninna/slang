@@ -29,6 +29,7 @@ pub trait Device8Bit {
 
     // Read 64 bits from a 8 bit device
     fn read64(&self, addr: u64) -> u64 {
+        // Add 7 to check the last 8 bits
         if !self.check_addr(addr) || !self.check_addr(addr + 7) {
             panic!("Address out of bounds: {0:#x}", addr);
         }
@@ -43,6 +44,7 @@ pub trait Device8Bit {
 
     // Write 64 bits to a 8 bit device
     fn write64(&mut self, addr: u64, data: u64) {
+        // Add 7 to check the last 8 bits
         if !self.check_addr(addr) || !self.check_addr(addr + 7) {
             panic!("Address out of bounds: {0:#x}", addr);
         }
