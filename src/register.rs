@@ -1,4 +1,4 @@
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 pub enum Register {
     Accumulator = 0x01,        // Accumulator
     InstructionPointer = 0x02, // Instruction pointer

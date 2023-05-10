@@ -13,7 +13,7 @@ pub struct Cpu {
     ram: Ram, // TODO: Make this an device mapper
     regs: Registers,
     regs_names: Vec<Register>,
-    regs_addr_map: HashMap<String, u64>,
+    regs_addr_map: HashMap<Register, u64>,
 }
 
 // public methods
@@ -27,13 +27,13 @@ impl Cpu {
 
         // Make a register map
         let mut regs_addr_map = HashMap::new();
-        for (i, name) in regs_names.iter().enumerate() {
-            regs_addr_map.insert(name.to_string(), (i * std::mem::size_of::<u64>()) as u64);
+        for (i, reg) in regs_names.iter().enumerate() {
+            regs_addr_map.insert(reg.to_owned(), (i * std::mem::size_of::<u64>()) as u64);
         }
 
         // Set the stack pointer to the end of the memory
         regs.write(
-            *regs_addr_map.get("stack_pointer").unwrap(),
+            *regs_addr_map.get(&Register::StackPointer).unwrap(),
             mem_size as u64,
         );
 
@@ -74,7 +74,7 @@ impl Cpu {
 
     // Get reg address
     fn get_reg_addr(&self, reg: Register) -> u64 {
-        *self.regs_addr_map.get(&reg.to_string()).unwrap()
+        *self.regs_addr_map.get(&reg).unwrap()
     }
 
     // Index an register
