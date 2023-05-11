@@ -1,7 +1,7 @@
 use super::device::Device;
 
 // A trait for devices with generic bits
-trait BitsOps {
+pub trait BitsOps {
     // Returns a zero value of this type
     fn zero() -> Self;
 }
