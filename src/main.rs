@@ -1,4 +1,5 @@
 mod cpu;
+mod dev_map;
 mod devices;
 mod opcodes;
 mod register;

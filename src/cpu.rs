@@ -1,5 +1,6 @@
 use crate::{
-    devices::{device::Device, device_mapper::DeviceMapper, registers::Registers},
+    dev_map::{device::Device, device_mapper::DeviceMapper},
+    devices::registers::Registers,
     opcodes::{AddrMode, Instruction, Opcode, Operand},
     register::Register,
 };
