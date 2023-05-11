@@ -17,11 +17,11 @@ impl BitsOps for u64 {
 
 // A trait for devices with generic bits.
 trait Device<Bits> {
-    // Reads a value from an address of this device.
+    /// Reads a value from an address of this device.
     fn read(&self, addr: u64) -> Bits;
-    // Writes a value to an address of this device.
+    /// Writes a value to an address of this device.
     fn write(&mut self, addr: u64, value: Bits);
-    // Returns the size of the buffer of this device.
+    /// Returns the size of the buffer of this device.
     fn size(&self) -> usize;
 }
 
