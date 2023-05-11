@@ -74,6 +74,15 @@ impl<Bits: BitsOps> DeviceMapper<Bits> {
         self.regions.retain(|region| region.start != start);
     }
 
+    // Dumps the contents of the device mapper.
+    fn dump(&self) -> Vec<(String, u64, u64)> {
+        let dump = self
+            .regions
+            .iter()
+            .map(|region| (region.dev_name.clone(), region.start, region.end))
+            .collect();
+
+        dump
     }
 
     // Finds the region that contains an address.
