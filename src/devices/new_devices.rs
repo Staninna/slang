@@ -28,16 +28,18 @@ trait Device<Bits> {
 // A region in the device mapper that contains a device and its address range.
 struct Region<Bits> {
     device: Box<dyn Device<Bits>>,
+    dev_name: String,
     start: u64,
     end: u64,
 }
 
 impl<Bits> Region<Bits> {
     // Creates a new region with a device and its starting address.
-    fn new(device: Box<dyn Device<Bits>>, start_addr: u64) -> Self {
+    fn new(device: Box<dyn Device<Bits>>, dev_name: String, start_addr: u64) -> Self {
         let end_addr = start_addr + device.size() as u64;
         Self {
             device,
+            dev_name,
             start: start_addr,
             end: end_addr,
         }
@@ -63,8 +65,10 @@ impl<Bits: BitsOps> DeviceMapper<Bits> {
     }
 
     // Maps a device to an address range.
-    fn map(&mut self, device: Box<dyn Device<Bits>>, start: u64) {
-        self.regions.push(Region::new(device, start));
+    fn map(&mut self, device: Box<dyn Device<Bits>>, dev_name: String, start: u64) {
+        self.regions.push(Region::new(device, dev_name, start));
+    }
+
     }
 
     // Finds the region that contains an address.
