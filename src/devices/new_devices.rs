@@ -1,3 +1,20 @@
+trait BitsOps {
+    // Returns a zero value of this type.
+    fn zero() -> Self;
+}
+
+impl BitsOps for u8 {
+    fn zero() -> Self {
+        0
+    }
+}
+
+impl BitsOps for u64 {
+    fn zero() -> Self {
+        0
+    }
+}
+
 // A trait for devices with generic bits.
 trait Device<Bits> {
     // Reads a value from an address of this device.
@@ -37,7 +54,7 @@ struct DeviceMapper<Bits> {
     regions: Vec<Region<Bits>>,
 }
 
-impl<Bits> DeviceMapper<Bits> {
+impl<Bits: BitsOps> DeviceMapper<Bits> {
     // Creates a new device mapper with no regions.
     fn new() -> Self {
         Self {
@@ -67,8 +84,10 @@ impl<Bits> DeviceMapper<Bits> {
         if let Some(region) = self.find_region(addr) {
             let offset = addr - region.start;
             region.device.read(offset)
-        } else {
-            panic!("No region/device found for address: {:#x}", addr);
+        }
+        // If no region is found, return 0.
+        else {
+            Bits::zero()
         }
     }
 
@@ -77,7 +96,9 @@ impl<Bits> DeviceMapper<Bits> {
         if let Some(region) = self.find_region_mut(addr) {
             let offset = addr - region.start;
             region.device.write(offset, value)
-        } else {
+        }
+        // If no region is found, panic.
+        else {
             panic!("No region/device found for address: {:#x}", addr);
         }
     }
