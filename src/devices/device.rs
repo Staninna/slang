@@ -1,5 +1,5 @@
 pub struct Buffer {
-    pub data: Vec<u8>,
+    data: Vec<u8>,
 }
 
 impl Buffer {
@@ -8,50 +8,29 @@ impl Buffer {
             data: vec![0x00; size],
         }
     }
-}
 
-pub trait Device64Bit {
-    fn read(&self, addr: u64) -> u64;
-    fn write(&mut self, addr: u64, data: u64);
-    fn size(&self) -> usize;
-    fn check_addr(&self, addr: u64) -> bool {
-        addr < self.size() as u64
+    // Reads a value from the buffer at an offset
+    pub fn read(&self, offset: usize) -> u8 {
+        self.data[offset]
+    }
+
+    // Writes a value to the buffer at an offset
+    pub fn write(&mut self, offset: usize, value: u8) {
+        self.data[offset] = value;
+    }
+
+    // Returns the size of the buffer
+    pub fn size(&self) -> usize {
+        self.data.len()
     }
 }
 
-pub trait Device8Bit {
-    fn read(&self, addr: u64) -> u8;
-    fn write(&mut self, addr: u64, data: u8);
+// A trait for devices with generic bits.
+pub trait Device<Bits> {
+    /// Reads a value from an address of this device.
+    fn read(&self, addr: u64) -> Bits;
+    /// Writes a value to an address of this device.
+    fn write(&mut self, addr: u64, value: Bits);
+    /// Returns the size of the buffer of this device.
     fn size(&self) -> usize;
-    fn check_addr(&self, addr: u64) -> bool {
-        addr < self.size() as u64
-    }
-
-    // Read 64 bits from a 8 bit device
-    fn read64(&self, addr: u64) -> u64 {
-        // Add 7 to check the last 8 bits
-        if !self.check_addr(addr) || !self.check_addr(addr + 7) {
-            panic!("Address out of bounds: {0:#x}", addr);
-        }
-
-        let mut data: u64 = 0;
-        for i in 0..std::mem::size_of::<u64>() {
-            // Add the data from the next 8 bits to the data by shifting to the right place and oring it
-            data |= (self.read(addr + i as u64) as u64) << (i * 8);
-        }
-        data
-    }
-
-    // Write 64 bits to a 8 bit device
-    fn write64(&mut self, addr: u64, data: u64) {
-        // Add 7 to check the last 8 bits
-        if !self.check_addr(addr) || !self.check_addr(addr + 7) {
-            panic!("Address out of bounds: {0:#x}", addr);
-        }
-
-        for i in 0..std::mem::size_of::<u64>() {
-            // Write the data to the next 8 bits by shifting to the right place and replacing the data
-            self.write(addr + i as u64, (data >> (i * 8)) as u8);
-        }
-    }
 }

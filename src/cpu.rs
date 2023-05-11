@@ -1,16 +1,12 @@
 use crate::{
-    devices::{
-        device::{Device64Bit, Device8Bit},
-        ram::Ram,
-        registers::Registers,
-    },
+    devices::{device::Device, device_mapper::DeviceMapper, registers::Registers},
     opcodes::{AddrMode, Instruction, Opcode, Operand},
     register::Register,
 };
 use hashbrown::HashMap;
 
 pub struct Cpu {
-    ram: Ram, // TODO: Make this an device mapper
+    dev_mapper: DeviceMapper<u64>,
     regs: Registers,
     regs_names: Vec<Register>,
     regs_addr_map: HashMap<Register, u64>,
@@ -42,7 +38,7 @@ impl Cpu {
             regs,
             regs_names,
             regs_addr_map,
-            ram: Ram::new(mem_size),
+            dev_mapper: DeviceMapper::new(),
         }
     }
 
@@ -85,15 +81,15 @@ impl Cpu {
     // Fetch 8 bits of data from the instruction pointer
     fn fetch8(&mut self) -> u8 {
         let ip = self.read_reg(Register::InstructionPointer);
-        let data = self.ram.read(ip);
+        let data = self.dev_mapper.read(ip);
         self.write_reg(Register::InstructionPointer, ip + 1);
-        data
+        data as u8
     }
 
     // Fetch 64 bits of data from the instruction pointer
     fn fetch64(&mut self) -> u64 {
         let ip = self.read_reg(Register::InstructionPointer);
-        let data = self.ram.read64(ip);
+        let data = self.dev_mapper.read(ip);
         self.write_reg(Register::InstructionPointer, ip + 8);
         data
     }
@@ -247,7 +243,7 @@ impl Cpu {
             }
             // Imm -> Mem
             (Imm(imm), Mem(mem)) => {
-                self.ram.write64(mem, imm);
+                self.dev_mapper.write(mem, imm);
             }
             // Reg -> Reg
             (Reg(reg), Reg(reg2)) => {
@@ -260,18 +256,18 @@ impl Cpu {
             (Reg(reg), Mem(mem)) => {
                 let reg = self.index_reg(reg);
                 let data = self.read_reg(reg);
-                self.ram.write64(mem, data);
+                self.dev_mapper.write(mem, data);
             }
             // Mem -> Reg
             (Mem(mem), Reg(reg)) => {
                 let reg = self.index_reg(reg);
-                let data = self.ram.read64(mem);
+                let data = self.dev_mapper.read(mem);
                 self.write_reg(reg, data);
             }
             // Mem -> Mem
             (Mem(mem), Mem(mem2)) => {
-                let data = self.ram.read64(mem);
-                self.ram.write64(mem2, data);
+                let data = self.dev_mapper.read(mem);
+                self.dev_mapper.write(mem2, data);
             }
             _ => panic!("Invalid operands for mov instruction"),
         }
@@ -289,7 +285,7 @@ impl Cpu {
             // Mem -> Reg
             (Mem(mem), Reg(reg)) => {
                 let reg = self.index_reg(reg);
-                let data = self.ram.read64(mem);
+                let data = self.dev_mapper.read(mem);
                 self.write_reg(reg, data);
             }
             _ => panic!("Invalid operands for lod instruction"),
@@ -302,18 +298,18 @@ impl Cpu {
         match operands {
             // Imm -> Mem
             (Imm(imm), Mem(mem)) => {
-                self.ram.write64(mem, imm);
+                self.dev_mapper.write(mem, imm);
             }
             // Reg -> Mem
             (Reg(reg), Mem(mem)) => {
                 let reg = self.index_reg(reg);
                 let data = self.read_reg(reg);
-                self.ram.write64(mem, data);
+                self.dev_mapper.write(mem, data);
             }
             // Mem -> Mem
             (Mem(mem), Mem(mem2)) => {
-                let data = self.ram.read64(mem);
-                self.ram.write64(mem2, data);
+                let data = self.dev_mapper.read(mem);
+                self.dev_mapper.write(mem2, data);
             }
             _ => panic!("Invalid operands for str instruction"),
         }
@@ -341,7 +337,7 @@ impl Cpu {
             // Mem -> Reg
             (Mem(mem), Reg(reg)) => {
                 let reg = self.index_reg(reg);
-                let data = self.ram.read64(mem);
+                let data = self.dev_mapper.read(mem);
                 let data2 = self.read_reg(reg);
                 self.write_reg(Accumulator, data + data2);
             }
@@ -371,7 +367,7 @@ impl Cpu {
             // Mem -> Reg
             (Mem(mem), Reg(reg)) => {
                 let reg = self.index_reg(reg);
-                let data = self.ram.read64(mem);
+                let data = self.dev_mapper.read(mem);
                 let data2 = self.read_reg(reg);
                 self.write_reg(Accumulator, data - data2);
             }
@@ -401,7 +397,7 @@ impl Cpu {
             // Mem -> Reg
             (Mem(mem), Reg(reg)) => {
                 let reg = self.index_reg(reg);
-                let data = self.ram.read64(mem);
+                let data = self.dev_mapper.read(mem);
                 let data2 = self.read_reg(reg);
                 self.write_reg(Accumulator, data * data2);
             }
@@ -431,7 +427,7 @@ impl Cpu {
             // Mem -> Reg
             (Mem(mem), Reg(reg)) => {
                 let reg = self.index_reg(reg);
-                let data = self.ram.read64(mem);
+                let data = self.dev_mapper.read(mem);
                 let data2 = self.read_reg(reg);
                 self.write_reg(Accumulator, data / data2);
             }
@@ -452,8 +448,8 @@ impl Cpu {
             }
             // Mem
             (Mem(mem), Null) => {
-                let data = self.ram.read64(mem);
-                self.ram.write64(mem, data + 1);
+                let data = self.dev_mapper.read(mem);
+                self.dev_mapper.write(mem, data + 1);
             }
             _ => panic!("Invalid operands for inc instruction"),
         }
@@ -472,8 +468,8 @@ impl Cpu {
             }
             // Mem
             (Mem(mem), Null) => {
-                let data = self.ram.read64(mem);
-                self.ram.write64(mem, data - 1);
+                let data = self.dev_mapper.read(mem);
+                self.dev_mapper.write(mem, data - 1);
             }
             _ => panic!("Invalid operands for dec instruction"),
         }
@@ -561,7 +557,7 @@ impl Cpu {
             }
             // Mem
             (Mem(mem), Null) => {
-                let data = self.ram.read64(mem);
+                let data = self.dev_mapper.read(mem);
                 self.write_reg(Accumulator, !data);
             }
             _ => panic!("Invalid operands for not instruction"),
@@ -841,7 +837,7 @@ impl Cpu {
             // Imm -> Stack
             (Imm(imm), Null) => {
                 let sp = self.read_reg(StackPointer);
-                self.ram.write64(sp, imm);
+                self.dev_mapper.write(sp, imm);
                 self.write_reg(StackPointer, sp - std::mem::size_of::<u64>() as u64);
                 self.write_reg(
                     FrameSize,
@@ -853,7 +849,7 @@ impl Cpu {
                 let sp = self.read_reg(StackPointer);
                 let reg = self.index_reg(reg);
                 let data = self.read_reg(reg);
-                self.ram.write64(sp, data);
+                self.dev_mapper.write(sp, data);
                 self.write_reg(StackPointer, sp - std::mem::size_of::<u64>() as u64);
                 self.write_reg(
                     FrameSize,
@@ -873,7 +869,7 @@ impl Cpu {
             (Reg(reg), Null) => {
                 let sp = self.read_reg(StackPointer);
                 let reg = self.index_reg(reg);
-                let data = self.ram.read64(sp);
+                let data = self.dev_mapper.read(sp);
                 self.write_reg(reg, data);
                 self.write_reg(StackPointer, sp + std::mem::size_of::<u64>() as u64);
                 self.write_reg(
@@ -902,9 +898,9 @@ impl Cpu {
             // Stack -> Stack
             (Null, Null) => {
                 let sp = self.read_reg(StackPointer);
-                let data = self.ram.read64(sp);
-                self.ram
-                    .write64(sp - std::mem::size_of::<u64>() as u64, data);
+                let data = self.dev_mapper.read(sp);
+                self.dev_mapper
+                    .write(sp - std::mem::size_of::<u64>() as u64, data);
                 self.write_reg(StackPointer, sp - std::mem::size_of::<u64>() as u64);
             }
             _ => panic!("Invalid operands for dup instruction"),
@@ -919,11 +915,11 @@ impl Cpu {
             // Stack -> Stack
             (Null, Null) => {
                 let sp = self.read_reg(StackPointer);
-                let data1 = self.ram.read64(sp);
-                let data2 = self.ram.read64(sp + std::mem::size_of::<u64>() as u64);
-                self.ram.write64(sp, data2);
-                self.ram
-                    .write64(sp + std::mem::size_of::<u64>() as u64, data1);
+                let data1 = self.dev_mapper.read(sp);
+                let data2 = self.dev_mapper.read(sp + std::mem::size_of::<u64>() as u64);
+                self.dev_mapper.write(sp, data2);
+                self.dev_mapper
+                    .write(sp + std::mem::size_of::<u64>() as u64, data1);
             }
             _ => panic!("Invalid operands for swp instruction"),
         }
@@ -932,11 +928,12 @@ impl Cpu {
     // Clear the whole stack
     fn clr(&mut self, operands: (Operand, Operand)) {
         use Operand::*;
-        use Register::*;
+        // use Register::*;
         match operands {
             // Stack -> Stack
             (Null, Null) => {
-                self.write_reg(StackPointer, self.ram.size() as u64);
+                todo!("Fix the .size() method");
+                // self.write_reg(StackPointer, self.dev_mapper.size() as u64);
             }
             _ => panic!("Invalid operands for clr instruction"),
         }

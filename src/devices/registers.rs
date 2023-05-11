@@ -1,4 +1,4 @@
-use super::device::{Buffer, Device64Bit};
+use super::device::{Buffer, Device};
 
 pub struct Registers {
     buffer: Buffer,
@@ -12,32 +12,24 @@ impl Registers {
     }
 }
 
-impl Device64Bit for Registers {
+impl Device<u64> for Registers {
     fn read(&self, addr: u64) -> u64 {
-        if !self.check_addr(addr) {
-            panic!("Invalid address: {0:#x}", addr)
+        let offset = addr as usize;
+        let mut value: u64 = 0;
+        for i in 0..8 {
+            value |= (self.buffer.read(offset + i) as u64) << (i * 8);
         }
-
-        let mut data: u64 = 0;
-        for i in 0..std::mem::size_of::<u64>() {
-            // Add the data from the next 8 bits to the data by shifting to the right place and oring it
-            data |= (self.buffer.data[(addr + i as u64) as usize] as u64) << (i * 8);
-        }
-        data
+        value
     }
 
-    fn write(&mut self, addr: u64, data: u64) {
-        if !self.check_addr(addr) {
-            panic!("Invalid address: {0:#x}", addr)
-        }
-
-        for i in 0..std::mem::size_of::<u64>() {
-            // Write the data to the next 8 bits by shifting to the right place and replacing the data
-            self.buffer.data[(addr + i as u64) as usize] = (data >> (i * 8)) as u8;
+    fn write(&mut self, addr: u64, value: u64) {
+        let offset = addr as usize;
+        for i in 0..8 {
+            self.buffer.write(offset + i, (value >> (i * 8)) as u8);
         }
     }
 
     fn size(&self) -> usize {
-        self.buffer.data.len()
+        self.buffer.size()
     }
 }
