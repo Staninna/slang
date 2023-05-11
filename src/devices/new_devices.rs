@@ -69,6 +69,11 @@ impl<Bits: BitsOps> DeviceMapper<Bits> {
         self.regions.push(Region::new(device, dev_name, start));
     }
 
+    // Unmaps a device from an address range.
+    fn unmap(&mut self, start: u64) {
+        self.regions.retain(|region| region.start != start);
+    }
+
     }
 
     // Finds the region that contains an address.
