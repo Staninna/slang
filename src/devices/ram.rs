@@ -12,15 +12,15 @@ impl Ram {
     }
 }
 
-impl Device<u64> for Ram {
-    fn read(&self, addr: u64) -> u64 {
+impl Device for Ram {
+    fn read(&self, addr: u64) -> u8 {
         let offset = addr as usize;
-        self.buffer.read(offset) as u64
+        self.buffer.read(offset)
     }
 
-    fn write(&mut self, addr: u64, value: u64) {
+    fn write(&mut self, addr: u64, value: u8) {
         let offset = addr as usize;
-        self.buffer.write(offset, value as u8);
+        self.buffer.write(offset, value);
     }
 
     fn size(&self) -> usize {

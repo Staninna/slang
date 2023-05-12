@@ -1,4 +1,4 @@
-use crate::dev_map::device::{Buffer, Device};
+use crate::dev_map::device::Buffer;
 
 pub struct Registers {
     buffer: Buffer,
@@ -10,10 +10,8 @@ impl Registers {
             buffer: Buffer::new(size),
         }
     }
-}
 
-impl Device<u64> for Registers {
-    fn read(&self, addr: u64) -> u64 {
+    pub fn read(&self, addr: u64) -> u64 {
         let offset = addr as usize;
         let mut value: u64 = 0;
         for i in 0..8 {
@@ -22,14 +20,10 @@ impl Device<u64> for Registers {
         value
     }
 
-    fn write(&mut self, addr: u64, value: u64) {
+    pub fn write(&mut self, addr: u64, value: u64) {
         let offset = addr as usize;
         for i in 0..8 {
             self.buffer.write(offset + i, (value >> (i * 8)) as u8);
         }
-    }
-
-    fn size(&self) -> usize {
-        self.buffer.size()
     }
 }

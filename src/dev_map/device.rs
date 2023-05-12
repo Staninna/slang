@@ -26,11 +26,29 @@ impl Buffer {
 }
 
 // A trait for devices with generic bits.
-pub trait Device<Bits> {
-    /// Reads a value from an address of this device.
-    fn read(&self, addr: u64) -> Bits;
-    /// Writes a value to an address of this device.
-    fn write(&mut self, addr: u64, value: Bits);
+pub trait Device {
+    /// Reads a value from an address of this device 8 bits at a time.
+    fn read(&self, addr: u64) -> u8;
+    /// Writes a value to an address of this device 8 bits at a time.
+    fn write(&mut self, addr: u64, value: u8);
     /// Returns the size of the buffer of this device.
     fn size(&self) -> usize;
+
+    // Reads a value from an address of this device 64 bits at a time.
+    fn read64(&self, addr: u64) -> u64 {
+        let offset = addr;
+        let mut value: u64 = 0;
+        for i in 0..8 {
+            value |= (self.read(offset + i) as u64) << (i * 8);
+        }
+        value
+    }
+
+    // Writes a value to an address of this device 64 bits at a time.
+    fn write64(&mut self, addr: u64, value: u64) {
+        let offset = addr;
+        for i in 0..8 {
+            self.write(offset + i, (value >> (i * 8)) as u8);
+        }
+    }
 }
