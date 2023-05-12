@@ -1,6 +1,6 @@
 use crate::{
     dev_map::{device::Device, device_mapper::DeviceMapper},
-    devices::registers::Registers,
+    devices::{ram::Ram, registers::Registers},
     opcodes::{AddrMode, Instruction, Opcode, Operand},
     register::Register,
 };
@@ -33,6 +33,13 @@ impl Cpu {
             *regs_addr_map.get(&Register::StackPointer).unwrap(),
             mem_size as u64,
         );
+
+        // Create device mapper
+        let mut dev_mapper = DeviceMapper::<u64>::new();
+
+        // Map the RAM
+        let ram = Ram::new(mem_size);
+        dev_mapper.map(Box::new(ram), "RAM".to_owned(), 0x00);
 
         // Return the CPU
         Self {

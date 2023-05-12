@@ -58,7 +58,7 @@ impl<Bits: BitsOps> DeviceMapper<Bits> {
     }
 
     // Maps a device to an address range
-    fn map(&mut self, device: Box<dyn Device<Bits>>, dev_name: String, start: u64) {
+    pub fn map(&mut self, device: Box<dyn Device<Bits>>, dev_name: String, start: u64) {
         self.regions.insert(0, Region::new(device, dev_name, start));
     }
 
