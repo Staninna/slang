@@ -13,14 +13,21 @@ impl Rom {
         }
     }
 
-    fn flash(&mut self, data: &[u8]) {
+    pub fn flash(&mut self, data: &[u8]) {
         for (i, byte) in data.iter().enumerate() {
             self.buffer.write(i, *byte);
         }
     }
 
-    fn toggle_writeable(&mut self) {
-        self.writeable = !self.writeable;
+    pub fn dump(&self) {
+        let len = self.buffer.size();
+
+        for i in 0..len {
+            print!("{:02x} ", self.buffer.read(i));
+            if i % 16 == 15 {
+                println!();
+            }
+        }
     }
 }
 

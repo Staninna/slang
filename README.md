@@ -99,7 +99,7 @@ The Slang VM supports the following addressing modes:
 | `REG->MEM` | Register to memory    | 8-bit | `0x40` | 8-bit -> 64-bit  |
 | `MEM->REG` | Memory to register    | 8-bit | `0x50` | 64-bit -> 8-bit  |
 | `MEM->MEM` | Memory to memory      | 8-bit | `0x60` | 64-bit -> 64-bit |
-| `IMML`     | Literals              | 8-bit | `0x70` | 64-bit           |
+| `IMM`      | Literals              | 8-bit | `0x70` | 64-bit           |
 | `REG`      | Registers             | 8-bit | `0x80` | 8-bit            |
 | `MEM`      | Memory                | 8-bit | `0x90` | 64-bit           |
 | `NULL`     | No operand            | 8-bit | `0xA0` | -                |

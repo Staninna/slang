@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub enum Opcode {
     // Misc
     Nop = 0xFF,
@@ -97,6 +98,7 @@ impl From<u8> for Opcode {
     }
 }
 
+#[derive(Debug, PartialEq)]
 pub enum AddrMode {
     ImmToReg = 0x10,
     ImmToMem = 0x20,
@@ -114,27 +116,56 @@ impl From<u8> for AddrMode {
     fn from(addr_mode: u8) -> Self {
         use AddrMode::*;
         match addr_mode {
-            0x00 => Null,
-            0x10 => RegToReg,
-            0x20 => RegToMem,
-            0x30 => ImmToReg,
-            0x40 => ImmToMem,
+            0x10 => ImmToReg,
+            0x20 => ImmToMem,
+            0x30 => RegToReg,
+            0x40 => RegToMem,
             0x50 => MemToReg,
             0x60 => MemToMem,
             0x70 => Literal,
             0x80 => Register,
             0x90 => Memory,
+            0xA0 => Null,
 
             _ => panic!("Invalid address mode: {0:#x}", addr_mode),
         }
     }
 }
 
+#[derive(PartialEq)]
 pub enum Operand {
     Null,
     Reg(u8),
     Imm(u64),
     Mem(u64),
+}
+
+impl std::fmt::Debug for Operand {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            Operand::Null => write!(f, "Null"),
+            Operand::Reg(reg) => match reg {
+                1 => write!(f, "Acc"),
+                2 => write!(f, "Ip"),
+                3 => write!(f, "Sp"),
+                4 => write!(f, "Fp"),
+                5 => write!(f, "Fs"),
+                6 => write!(f, "Ac"),
+                7 => write!(f, "R1"),
+                8 => write!(f, "R2"),
+                9 => write!(f, "R3"),
+                10 => write!(f, "R4"),
+                11 => write!(f, "R5"),
+                12 => write!(f, "R6"),
+                13 => write!(f, "R7"),
+                14 => write!(f, "R8"),
+                0 | 15..=u8::MAX => panic!("Invalid register: {0:#x}", reg),
+            },
+            // Prefix with #x to indicate literal
+            Operand::Imm(imm) => write!(f, "#{:#x}", imm),
+            Operand::Mem(mem) => write!(f, "[{:#x}]", mem),
+        }
+    }
 }
 
 pub struct Instruction {
@@ -154,5 +185,27 @@ impl Instruction {
 
     pub fn unpack(self) -> (Opcode, AddrMode, (Operand, Operand)) {
         (self.opcode, self.addr_mode, self.operands)
+    }
+}
+
+impl std::fmt::Debug for Instruction {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        if self.operands.1 == Operand::Null {
+            return write!(
+                f,
+                "{:?} {:?}: {:?}",
+                self.opcode, self.addr_mode, self.operands.0
+            );
+        }
+
+        if self.addr_mode == AddrMode::Null {
+            return write!(f, "{:?}", self.opcode);
+        }
+
+        return write!(
+            f,
+            "{:?} {:?}: {:?}, {:?}",
+            self.opcode, self.addr_mode, self.operands.0, self.operands.1
+        );
     }
 }

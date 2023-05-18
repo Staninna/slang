@@ -1,5 +1,7 @@
+// TODO: Check reg indexes/addr maps
+
 use crate::{
-    dev_map::device_mapper::DeviceMapper,
+    dev_map::{device::Device, device_mapper::DeviceMapper},
     devices::{ram::Ram, registers::Registers},
     opcodes::{AddrMode, Instruction, Opcode, Operand},
     register::Register,
@@ -8,8 +10,8 @@ use hashbrown::HashMap;
 
 pub struct Cpu {
     regs: Registers,
-    dev_mapper: DeviceMapper,
     regs_names: Vec<Register>,
+    pub dev_mapper: DeviceMapper,
     regs_addr_map: HashMap<Register, u64>,
 }
 
@@ -26,6 +28,11 @@ impl Cpu {
         let mut regs_addr_map = HashMap::new();
         for (i, reg) in regs_names.iter().enumerate() {
             regs_addr_map.insert(reg.to_owned(), (i * std::mem::size_of::<u64>()) as u64);
+        }
+
+        // Set all the registers to 0
+        for reg in regs_names.iter() {
+            regs.write(*regs_addr_map.get(reg).unwrap(), 0x00);
         }
 
         // Set the stack pointer to the end of the memory
@@ -56,9 +63,16 @@ impl Cpu {
             // Fetch the instruction
             let instr = self.fetch();
 
+            println!("{:?}", instr);
+
             // Execute the instruction
             self.execute(instr);
         }
+    }
+
+    // Attach a device to the CPU
+    pub fn attach(&mut self, box_device: Box<dyn Device>, dev_name: String, start_addr: u64) {
+        self.dev_mapper.map(box_device, dev_name, start_addr);
     }
 }
 
@@ -99,7 +113,7 @@ impl Cpu {
         let ip = self.read_reg(Register::InstructionPointer);
         let mut data: u64 = 0;
         for i in 0..8 {
-            data |= (self.dev_mapper.read(ip + i) as u64) << (i * 8);
+            data |= self.dev_mapper.read(ip + i) as u64;
         }
         self.write_reg(Register::InstructionPointer, ip + 8);
         data

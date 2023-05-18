@@ -39,7 +39,7 @@ pub trait Device {
         let offset = addr;
         let mut value: u64 = 0;
         for i in 0..8 {
-            value |= (self.read(offset + i) as u64) << (i * 8);
+            value |= self.read(offset + i) as u64;
         }
         value
     }

@@ -15,7 +15,7 @@ impl Registers {
         let offset = addr as usize;
         let mut value: u64 = 0;
         for i in 0..8 {
-            value |= (self.buffer.read(offset + i) as u64) << (i * 8);
+            value |= self.buffer.read(offset + i) as u64;
         }
         value
     }
