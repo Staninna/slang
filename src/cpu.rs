@@ -1,5 +1,3 @@
-// TODO: Check reg indexes/addr maps
-
 use crate::{
     dev_map::{device::Device, device_mapper::DeviceMapper},
     devices::{ram::Ram, registers::Registers},
@@ -63,8 +61,6 @@ impl Cpu {
             // Fetch the instruction
             let instr = self.fetch();
 
-            println!("{:?}", instr);
-
             // Execute the instruction
             self.execute(instr);
         }
@@ -111,10 +107,11 @@ impl Cpu {
     // Fetch 64 bits of data from the instruction pointer
     fn fetch64(&mut self) -> u64 {
         let ip = self.read_reg(Register::InstructionPointer);
-        let mut data: u64 = 0;
+        let mut bytes = [0; 8];
         for i in 0..8 {
-            data |= self.dev_mapper.read(ip + i) as u64;
+            bytes[i] = self.dev_mapper.read(ip + i as u64);
         }
+        let data = u64::from_be_bytes(bytes);
         self.write_reg(Register::InstructionPointer, ip + 8);
         data
     }

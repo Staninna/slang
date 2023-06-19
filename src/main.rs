@@ -1,4 +1,4 @@
-use devices::rom::Rom;
+use devices::{rom::Rom, stdout::Stdout};
 
 mod cpu;
 mod dev_map;
@@ -6,7 +6,9 @@ mod devices;
 mod opcodes;
 mod register;
 
-const MEM_SIZE: usize = 1024; // 1 KiB
+const MEM_SIZE: usize = 1024 * 1024 * 1024 * 4; // 4GB
+const ROM_SIZE: usize = 1024 * 1024; // 1MB
+const STDOUT_ADDR: u64 = 0x0000_0000_FFFF_0000;
 
 fn main() {
     // Create CPU
@@ -16,52 +18,44 @@ fn main() {
     let rom = Box::new(rom());
     cpu.attach(rom, String::from("rom"), 0);
 
-    println!("{:#?}", cpu.dev_mapper.dump());
+    // Attach stdout
+    let stdout = Box::new(Stdout::new());
+    cpu.attach(stdout, String::from("stdout"), STDOUT_ADDR);
 
     // Run CPU
     cpu.run();
 }
 
 fn rom() -> Rom {
+    use opcodes::AddrMode::*;
     use opcodes::Opcode::*;
-    use register::Register::*;
+
+    // Stdout_addr as u8 list to easily flash to ROM
+    let stdout = STDOUT_ADDR.to_be_bytes();
 
     #[rustfmt::skip]
     let program = vec![
-        // Init:
-
-        // Move 1 to R1
-        Mov as u8, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, Reg1 as u8, // MOV 0x0000000000000001, R1 (0x0000 - 0x000A)
-        // Move 0 to R2
-        Mov as u8, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, Reg2 as u8, // MOV 0x0000000000000000, R2 (0x000B - 0x0015)
-        // Move 10 to R3
-        Mov as u8, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, Reg3 as u8, // MOV 0x000000000000000A, R3 (0x0016 - 0x0020)
-
-        // Loop:
-
-        // Add R1 to R2
-        Add as u8, 0x30, Reg1 as u8, Reg2 as u8,                                     // ADD R1, R2 (0x0021 - 0x0027)
-        // Move R2 to R1
-        Mov as u8, 0x30, Reg2 as u8, Reg1 as u8,                                     // MOV R2, R1 (0x0028 - 0x002E)
-        // Move 1 to R3
-        Sub as u8, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, Reg3 as u8, // SUB 0x0000000000000001, R3 (0x002F - 0x0039)
-        // Move to loop if R3 is not 0
-        Jnz as u8, 0x70, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x21,             // JNZ loop (0x003A - 0x0044)
-
-        // Crash the CPU
-        0x69
+        // Print "Hello, World!"
+        Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, 'H' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
+        Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, 'e' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
+        Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, 'l' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
+        Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, 'l' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
+        Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, 'o' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
+        Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, ',' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
+        Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, ' ' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
+        Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, 'W' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
+        Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, 'o' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
+        Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, 'r' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
+        Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, 'l' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
+        Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, 'd' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
+        Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, '!' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
     ];
 
-    let mut rom = Rom::new(program.len());
-
-    // Print rom per instruction (for debugging)
-    for (i, byte) in program.iter().enumerate() {
-        println!("0x{:04X}: 0x{:02X}", i, byte);
-    }
+    let mut rom = Rom::new(ROM_SIZE);
 
     rom.flash(&program);
 
-    rom.dump();
+    rom.dump(program.len());
 
     rom
 }

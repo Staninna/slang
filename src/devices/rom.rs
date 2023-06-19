@@ -19,15 +19,18 @@ impl Rom {
         }
     }
 
-    pub fn dump(&self) {
+    pub fn dump(&self, amount_bytes: usize) {
         let len = self.buffer.size();
 
-        for i in 0..len {
+        for i in 0..amount_bytes.min(len) {
             print!("{:02x} ", self.buffer.read(i));
-            if i % 16 == 15 {
+            // Every 18 bytes, print a newline
+            if i % 18 == 17 {
                 println!();
             }
         }
+        println!();
+        println!();
     }
 }
 

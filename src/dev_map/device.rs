@@ -37,11 +37,11 @@ pub trait Device {
     // Reads a value from an address of this device 64 bits at a time.
     fn read64(&self, addr: u64) -> u64 {
         let offset = addr;
-        let mut value: u64 = 0;
+        let mut bytes = [0; 8];
         for i in 0..8 {
-            value |= self.read(offset + i) as u64;
+            bytes[i] = self.read(offset + i as u64);
         }
-        value
+        u64::from_le_bytes(bytes)
     }
 
     // Writes a value to an address of this device 64 bits at a time.

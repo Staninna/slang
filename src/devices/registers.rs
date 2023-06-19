@@ -13,11 +13,11 @@ impl Registers {
 
     pub fn read(&self, addr: u64) -> u64 {
         let offset = addr as usize;
-        let mut value: u64 = 0;
+        let mut bytes = [0; 8];
         for i in 0..8 {
-            value |= self.buffer.read(offset + i) as u64;
+            bytes[i] = self.buffer.read(offset + i as usize);
         }
-        value
+        u64::from_le_bytes(bytes)
     }
 
     pub fn write(&mut self, addr: u64, value: u64) {
