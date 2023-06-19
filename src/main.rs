@@ -55,19 +55,5 @@ fn rom() -> Rom {
 
     rom.flash(&program);
 
-    rom.dump(program.len());
-
     rom
 }
-
-// ; Initialize value to be incremented
-// MOV 0x0000000000000001, R1 ; Move immediate value to register R1
-
-// ; Loop 10 times and increment the value in R1 each iteration
-// MOV 0x0000000000000000, R2 ; Move immediate value to register R2
-// MOV 0x000000000000000A, R3 ; Move immediate value to register R3
-// loop:
-//     ADD R1, R2              ; Add the value in R1 to R2
-//     MOV R2, R1              ; Move the result back to R1
-//     SUB 0x0000000000000001, R3 ; Decrement the loop counter
-//     JNZ loop               ; Jump to "loop" if the zero flag is not set

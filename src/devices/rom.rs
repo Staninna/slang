@@ -18,20 +18,6 @@ impl Rom {
             self.buffer.write(i, *byte);
         }
     }
-
-    pub fn dump(&self, amount_bytes: usize) {
-        let len = self.buffer.size();
-
-        for i in 0..amount_bytes.min(len) {
-            print!("{:02x} ", self.buffer.read(i));
-            // Every 18 bytes, print a newline
-            if i % 18 == 17 {
-                println!();
-            }
-        }
-        println!();
-        println!();
-    }
 }
 
 impl Device for Rom {
