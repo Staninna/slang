@@ -21,6 +21,7 @@ impl BitsOps for u64 {
 // A region in the device mapper that contains a device and its address range
 struct Region {
     device: Box<dyn Device>,
+    #[allow(dead_code)]
     dev_name: String,
     start: u64,
     end: u64,
@@ -67,18 +68,6 @@ impl DeviceMapper {
     #[allow(dead_code)]
     pub fn unmap(&mut self, start: u64) {
         self.regions.retain(|region| region.start != start);
-    }
-
-    // Dumps the contents of the device mapper
-    #[allow(dead_code)]
-    pub fn dump(&self) -> Vec<(String, u64, u64)> {
-        let dump = self
-            .regions
-            .iter()
-            .map(|region| (region.dev_name.clone(), region.start, region.end))
-            .collect();
-
-        dump
     }
 
     // Finds the region that contains an address
