@@ -1,6 +1,7 @@
 use crate::dev_map::device::Device;
 
 pub const STDOUT_SIZE: usize = 0x1000;
+pub const STDOUT_NEWLINE: u8 = 0xFF;
 
 pub struct Stdout;
 
@@ -12,11 +13,14 @@ impl Stdout {
 
 impl Device for Stdout {
     fn read(&self, _addr: u64) -> u8 {
-        0
+        panic!("Cannot read from stdout");
     }
 
     fn write(&mut self, _addr: u64, value: u8) {
-        print!("{}", value as char);
+        match value {
+            STDOUT_NEWLINE => print!("\n"),
+            _ => print!("{}", value as char),
+        }
     }
 
     fn size(&self) -> usize {
