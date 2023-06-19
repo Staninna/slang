@@ -22,7 +22,7 @@ impl Cpu {
         // Make a register memory buffer
         let mut regs = Registers::new(regs_names.len() * std::mem::size_of::<u64>());
 
-        // Make a register map
+        // Make a register map for the address in the register memory buffer defined above
         let mut regs_addr_map = HashMap::new();
         for (i, reg) in regs_names.iter().enumerate() {
             regs_addr_map.insert(reg.to_owned(), (i * std::mem::size_of::<u64>()) as u64);
