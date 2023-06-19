@@ -1,4 +1,7 @@
-#[derive(Copy, Clone, Eq, PartialEq, Hash)]
+use strum::IntoEnumIterator;
+use strum_macros::EnumIter;
+
+#[derive(Copy, Clone, Eq, PartialEq, Hash, EnumIter)]
 pub enum Register {
     Accumulator = 0x01,        // Accumulator
     InstructionPointer = 0x02, // Instruction pointer
@@ -18,23 +21,13 @@ pub enum Register {
 
 impl Register {
     pub fn all() -> Vec<Register> {
-        use Register::*;
-        vec![
-            Accumulator,
-            InstructionPointer,
-            StackPointer,
-            FramePointer,
-            FrameSize,
-            ArgCount,
-            Reg1,
-            Reg2,
-            Reg3,
-            Reg4,
-            Reg5,
-            Reg6,
-            Reg7,
-            Reg8,
-        ]
+        // Use iterator to get all registers
+        let mut registers = Vec::new();
+        for register in Register::iter() {
+            registers.push(register);
+        }
+
+        registers
     }
 }
 
