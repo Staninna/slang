@@ -1,4 +1,7 @@
-use devices::{rom::Rom, stdout::Stdout};
+use devices::{
+    rom::Rom,
+    stdout::{Stdout, STDOUT_NEWLINE},
+};
 
 mod cpu;
 mod dev_map;
@@ -30,8 +33,9 @@ fn rom() -> Rom {
     use opcodes::AddrMode::*;
     use opcodes::Opcode::*;
 
-    // Stdout_addr as u8 list to easily flash to ROM
+    // Stdout constants as bytes
     let stdout = STDOUT_ADDR.to_be_bytes();
+    let new_line = (STDOUT_NEWLINE as u64).to_be_bytes();
 
     #[rustfmt::skip]
     let program = vec![
@@ -49,6 +53,7 @@ fn rom() -> Rom {
         Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, 'l' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
         Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, 'd' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
         Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, '!' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
+        Mov as u8, ImmToMem as u8, new_line[0], new_line[1], new_line[2], new_line[3], new_line[4], new_line[5], new_line[6], new_line[7], stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
     ];
 
     let mut rom = Rom::new(ROM_SIZE);
