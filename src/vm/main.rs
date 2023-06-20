@@ -1,14 +1,16 @@
-use vm::{
-    cpu::Cpu,
-    devices::{
-        rom::Rom,
-        stdout::{Stdout, STDOUT_NEWLINE},
-    },
-    opcodes::AddrMode::*,
-    opcodes::Opcode::*,
+use cpu::Cpu;
+use devices::{
+    rom::Rom,
+    stdout::{Stdout, STDOUT_NEWLINE},
 };
+use opcodes::AddrMode::*;
+use opcodes::Opcode::*;
 
-mod vm;
+mod cpu;
+mod dev_map;
+mod devices;
+mod opcodes;
+mod register;
 
 const MEM_SIZE: usize = 1024 * 1024 * 1024 * 4; // 4GB
 const ROM_SIZE: usize = 1024 * 1024; // 1MB

@@ -1,4 +1,4 @@
-use crate::vm::dev_map::device::Device;
+use crate::dev_map::device::Device;
 
 pub const STDOUT_SIZE: usize = 0x1000;
 pub const STDOUT_NEWLINE: u8 = 0xFF;

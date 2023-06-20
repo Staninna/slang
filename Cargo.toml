@@ -14,3 +14,11 @@ strum_macros = "0.24.1"
 lto = true
 codegen-units = 1
 opt-level = 3
+
+[[bin]]
+name = "vm"
+path = "src/vm/main.rs"
+
+[[bin]]
+name = "asm"
+path = "src/asm/main.rs"

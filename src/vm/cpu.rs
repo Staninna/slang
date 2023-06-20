@@ -1,10 +1,9 @@
 use super::{
     dev_map::{device::Device, device_mapper::DeviceMapper},
     devices::{ram::Ram, registers::Registers},
-    opcodes::{AddrMode, Instruction, Opcode},
+    opcodes::{AddrMode, Instruction, Opcode, Operand},
     register::Register,
 };
-use crate::vm::opcodes::Operand;
 use hashbrown::HashMap;
 
 pub struct Cpu {

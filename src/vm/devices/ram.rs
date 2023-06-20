@@ -1,4 +1,4 @@
-use crate::vm::dev_map::device::{Buffer, Device};
+use crate::dev_map::device::{Buffer, Device};
 
 pub struct Ram {
     buffer: Buffer,
