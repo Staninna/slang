@@ -1,4 +1,4 @@
-use crate::dev_map::device::Buffer;
+use crate::vm::dev_map::device::Buffer;
 
 pub struct Registers {
     buffer: Buffer,

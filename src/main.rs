@@ -1,13 +1,14 @@
-use devices::{
-    rom::Rom,
-    stdout::{Stdout, STDOUT_NEWLINE},
+use vm::{
+    cpu::Cpu,
+    devices::{
+        rom::Rom,
+        stdout::{Stdout, STDOUT_NEWLINE},
+    },
+    opcodes::AddrMode::*,
+    opcodes::Opcode::*,
 };
 
-mod cpu;
-mod dev_map;
-mod devices;
-mod opcodes;
-mod register;
+mod vm;
 
 const MEM_SIZE: usize = 1024 * 1024 * 1024 * 4; // 4GB
 const ROM_SIZE: usize = 1024 * 1024; // 1MB
@@ -15,7 +16,7 @@ const STDOUT_ADDR: u64 = 0x0000_0000_FFFF_0000;
 
 fn main() {
     // Create CPU
-    let mut cpu = cpu::Cpu::new(MEM_SIZE);
+    let mut cpu = Cpu::new(MEM_SIZE);
 
     // Attach ROM
     let rom = Box::new(rom());
@@ -30,9 +31,6 @@ fn main() {
 }
 
 fn rom() -> Rom {
-    use opcodes::AddrMode::*;
-    use opcodes::Opcode::*;
-
     // Stdout constants as bytes
     let stdout = STDOUT_ADDR.to_be_bytes();
     let new_line = (STDOUT_NEWLINE as u64).to_be_bytes();
