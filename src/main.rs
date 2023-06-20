@@ -54,6 +54,7 @@ fn rom() -> Rom {
         Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, 'd' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
         Mov as u8, ImmToMem as u8, 0x00, 0x00, 0x00, 0x00 ,0x00, 0x00, 0x00, '!' as u8, stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
         Mov as u8, ImmToMem as u8, new_line[0], new_line[1], new_line[2], new_line[3], new_line[4], new_line[5], new_line[6], new_line[7], stdout[0], stdout[1], stdout[2], stdout[3], stdout[4], stdout[5], stdout[6], stdout[7],
+        Hlt as u8, Null as u8,
     ];
 
     let mut rom = Rom::new(ROM_SIZE);

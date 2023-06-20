@@ -2,6 +2,7 @@
 pub enum Opcode {
     // Misc
     Nop = 0xFF,
+    Hlt = 0xFE,
 
     // Load and store
     Mov = 0x01,
@@ -92,6 +93,7 @@ impl From<u8> for Opcode {
             0x45 => Clr,
             0x46 => Ret,
             0x47 => Cal,
+            0xFE => Hlt,
 
             _ => panic!("Invalid opcode: {0:#x}", opcode),
         }

@@ -7,6 +7,7 @@ use crate::{
 use hashbrown::HashMap;
 
 pub struct Cpu {
+    running: bool,
     regs: Registers,
     regs_names: Vec<Register>,
     pub dev_mapper: DeviceMapper,
@@ -51,13 +52,16 @@ impl Cpu {
             regs,
             regs_names,
             regs_addr_map,
+            running: false,
             dev_mapper: DeviceMapper::new(),
         }
     }
 
     // Run the CPU
     pub fn run(&mut self) {
-        loop {
+        self.running = true;
+
+        while self.running {
             // Fetch the instruction
             let instr = self.fetch();
 
@@ -209,7 +213,8 @@ impl Cpu {
         use Opcode::*;
         match opcode {
             // Misc
-            Nop => {} // No operation
+            Nop => {}
+            Hlt => self.hlt(),
 
             // Load and store
             Mov => self.mov(operands),
@@ -252,6 +257,10 @@ impl Cpu {
             Ret => self.ret(operands),
             Cal => self.cal(operands),
         }
+    }
+
+    fn hlt(&mut self) {
+        self.running = false;
     }
 
     // Move

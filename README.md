@@ -55,6 +55,7 @@ The Slang VM supports the following opcodes:
 | Opcode | Description  | Size  | Code   | Modes  |
 | ------ | ------------ | ----- | ------ | ------ |
 | `NOP`  | No operation | 8-bit | `0xFF` | `NULL` |
+| `HLT`  | Halt         | 8-bit | `0xFE` | `NULL` |
 | `MOV`  | Move Data   | 8-bit | `0x01` | `IMM->REG`, `IMM->MEM`, `REG->REG`,<br>`REG->MEM`, `MEM->REG`, `MEM->MEM` |
 | `LOD`  | Load Data   | 8-bit | `0x02` | `IMM->REG`, `MEM->REG`                                                    |
 | `STR`  | Store Data  | 8-bit | `0x03` | `IMM->MEM`, `REG->MEM`, `MEM->MEM`                                        |
