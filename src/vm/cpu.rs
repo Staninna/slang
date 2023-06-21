@@ -158,6 +158,7 @@ impl Cpu {
 
         // Push the registers
         self.psh((Reg(InstructionPointer as u8), Null));
+        self.psh((Reg(Reg0 as u8), Null));
         self.psh((Reg(Reg1 as u8), Null));
         self.psh((Reg(Reg2 as u8), Null));
         self.psh((Reg(Reg3 as u8), Null));
@@ -165,7 +166,6 @@ impl Cpu {
         self.psh((Reg(Reg5 as u8), Null));
         self.psh((Reg(Reg6 as u8), Null));
         self.psh((Reg(Reg7 as u8), Null));
-        self.psh((Reg(Reg8 as u8), Null));
 
         // Push the stack frame size
         self.psh((Reg(FrameSize as u8), Null));
@@ -185,7 +185,6 @@ impl Cpu {
         self.pop((Reg(FrameSize as u8), Null));
 
         // Pop the registers
-        self.pop((Reg(Reg8 as u8), Null));
         self.pop((Reg(Reg7 as u8), Null));
         self.pop((Reg(Reg6 as u8), Null));
         self.pop((Reg(Reg5 as u8), Null));
@@ -193,6 +192,7 @@ impl Cpu {
         self.pop((Reg(Reg3 as u8), Null));
         self.pop((Reg(Reg2 as u8), Null));
         self.pop((Reg(Reg1 as u8), Null));
+        self.pop((Reg(Reg0 as u8), Null));
         self.pop((Reg(InstructionPointer as u8), Null));
 
         // Remove arguments from the stack

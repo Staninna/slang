@@ -1,3 +1,5 @@
+// TODO: Find way to remove ArgCount from register list
+
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
@@ -9,14 +11,14 @@ pub enum Register {
     FramePointer = 0x04,       // Frame pointer
     FrameSize = 0x05,          // Frame size
     ArgCount = 0x06,           // Argument count
-    Reg1 = 0x07,               // General purpose register
-    Reg2 = 0x08,               // General purpose register
-    Reg3 = 0x09,               // General purpose register
-    Reg4 = 0x0A,               // General purpose register
-    Reg5 = 0x0B,               // General purpose register
-    Reg6 = 0x0C,               // General purpose register
-    Reg7 = 0x0D,               // General purpose register
-    Reg8 = 0x0E,               // General purpose register
+    Reg0 = 0x07,               // General purpose register
+    Reg1 = 0x08,               // General purpose register
+    Reg2 = 0x09,               // General purpose register
+    Reg3 = 0x0A,               // General purpose register
+    Reg4 = 0x0B,               // General purpose register
+    Reg5 = 0x0C,               // General purpose register
+    Reg6 = 0x0D,               // General purpose register
+    Reg7 = 0x0E,               // General purpose register
 }
 
 impl Register {
@@ -31,6 +33,7 @@ impl Register {
     }
 }
 
+// TODO: Use strum
 impl ToString for Register {
     fn to_string(&self) -> String {
         use Register::*;
@@ -41,6 +44,7 @@ impl ToString for Register {
             FramePointer => "frame_pointer".to_string(),
             FrameSize => "frame_size".to_string(),
             ArgCount => "arg_count".to_string(),
+            Reg0 => "reg_0".to_string(),
             Reg1 => "reg_1".to_string(),
             Reg2 => "reg_2".to_string(),
             Reg3 => "reg_3".to_string(),
@@ -48,11 +52,11 @@ impl ToString for Register {
             Reg5 => "reg_5".to_string(),
             Reg6 => "reg_6".to_string(),
             Reg7 => "reg_7".to_string(),
-            Reg8 => "reg_8".to_string(),
         }
     }
 }
 
+// TODO: Use strum
 impl From<&str> for Register {
     fn from(name: &str) -> Self {
         use Register::*;
@@ -63,6 +67,7 @@ impl From<&str> for Register {
             "frame_pointer" => FramePointer,
             "frame_size" => FrameSize,
             "arg_count" => ArgCount,
+            "reg_0" => Reg0,
             "reg_1" => Reg1,
             "reg_2" => Reg2,
             "reg_3" => Reg3,
@@ -70,7 +75,6 @@ impl From<&str> for Register {
             "reg_5" => Reg5,
             "reg_6" => Reg6,
             "reg_7" => Reg7,
-            "reg_8" => Reg8,
             _ => panic!("Invalid register name: {}", name),
         }
     }
