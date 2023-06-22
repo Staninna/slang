@@ -10,7 +10,6 @@ pub enum Register {
     StackPointer = 0x03,       // Stack pointer
     FramePointer = 0x04,       // Frame pointer
     FrameSize = 0x05,          // Frame size
-    ArgCount = 0x06,           // Argument count
     Reg0 = 0x07,               // General purpose register
     Reg1 = 0x08,               // General purpose register
     Reg2 = 0x09,               // General purpose register
@@ -43,7 +42,6 @@ impl ToString for Register {
             StackPointer => "stack_pointer".to_string(),
             FramePointer => "frame_pointer".to_string(),
             FrameSize => "frame_size".to_string(),
-            ArgCount => "arg_count".to_string(),
             Reg0 => "reg_0".to_string(),
             Reg1 => "reg_1".to_string(),
             Reg2 => "reg_2".to_string(),
@@ -66,7 +64,6 @@ impl From<&str> for Register {
             "stack_pointer" => StackPointer,
             "frame_pointer" => FramePointer,
             "frame_size" => FrameSize,
-            "arg_count" => ArgCount,
             "reg_0" => Reg0,
             "reg_1" => Reg1,
             "reg_2" => Reg2,

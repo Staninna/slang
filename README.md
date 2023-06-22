@@ -27,7 +27,6 @@ The Slang VM has 14 registers, including 8 general-purpose registers (R1-R8) and
 - `SP`: Stack pointer for storing the address of the top of the stack
 - `FP`: Frame pointer for storing the address of the top of the current stack frame
 - `FS`: Frame size for storing the size of the current stack frame
-- `AC`: Argument count for storing the number of arguments passed to a subroutine (Related to the stack frame)
 
 Here's a table of the Slang VM registers:
 
@@ -38,7 +37,6 @@ Here's a table of the Slang VM registers:
 | `SP`     | Stack pointer       | 64-bit | `0x03` | Dynamic based on memory size |
 | `FP`     | Frame pointer       | 64-bit | `0x04` | `0x00`                       |
 | `FS`     | Frame size          | 64-bit | `0x05` | `0x00`                       |
-| `AC`     | Argument count      | 64-bit | `0x06` | `0x00`                       |
 | `R1`     | Register 1          | 64-bit | `0x07` | `0x00`                       |
 | `R2`     | Register 2          | 64-bit | `0x08` | `0x00`                       |
 | `R3`     | Register 3          | 64-bit | `0x09` | `0x00`                       |
@@ -104,6 +102,10 @@ The Slang VM supports the following addressing modes:
 | `REG`      | Registers             | 8-bit | `0x80` | 8-bit            |
 | `MEM`      | Memory                | 8-bit | `0x90` | 64-bit           |
 | `NULL`     | No operand            | 8-bit | `0xA0` | -                |
+
+## Subroutines
+
+Subroutines are called using the `CAL` instruction. The `CAL` instruction pushes the current state of registers `R0` through `R7` to the stack, and then jumps to the address specified by the operand. The `RET` instruction pops the top of the stack into registers `R0` through `R7`, and then jumps to the address specified by the operand. Arguments are passed to subroutines using the stack and need to be popped off the stack by the subroutine. The `CLR` instruction clears the last stack frame, and is used to clean up the stack after a subroutine returns.
 
 ## Bytecode Format
 

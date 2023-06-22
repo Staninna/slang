@@ -197,12 +197,6 @@ impl Cpu {
         self.pop((Reg(Reg0 as u8), Null));
         self.pop((Reg(InstructionPointer as u8), Null));
 
-        // Remove arguments from the stack
-        let num_args = self.read_reg(ArgCount);
-        for _ in 0..num_args {
-            self.pop((Null, Null));
-        }
-
         // Reset frame pointer
         let fs = self.read_reg(FrameSize);
         self.write_reg(FramePointer, fs + self.read_reg(FramePointer));
