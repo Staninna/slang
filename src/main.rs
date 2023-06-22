@@ -10,7 +10,7 @@ use vm::{
 
 const MEM_SIZE: usize = 1024 * 1024 * 1024 * 4; // 4GB
 const ROM_SIZE: usize = 1024 * 1024; // 1MB
-const STDOUT_ADDR: u64 = 0x0000_0000_FFFF_0000;
+const STDOUT_ADDR: u64 = 0x0000_0CD0_ABF2_D730;
 
 fn main() {
     // Create CPU
