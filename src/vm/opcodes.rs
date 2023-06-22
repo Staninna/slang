@@ -1,6 +1,6 @@
 use strum_macros::{EnumIter, EnumVariantNames};
 
-#[derive(Copy, Clone, Debug, EnumIter, EnumVariantNames)]
+#[derive(Debug, EnumIter, EnumVariantNames)]
 pub enum Opcode {
     // Misc
     Nop = 0xFF,
