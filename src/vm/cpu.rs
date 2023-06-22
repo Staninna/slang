@@ -126,6 +126,8 @@ impl Cpu {
         let opcode = Opcode::from(self.fetch8());
         let addr_mode = AddrMode::from(self.fetch8());
 
+        // TODO: Add u8 to format to encode the lenght of the operands (Null = 0, Reg = 1, Mem = Dynamic, Imm = Dynamic)
+
         // Match the address mode and get the operands
         let operands = self.fetch_operands(&addr_mode);
 
