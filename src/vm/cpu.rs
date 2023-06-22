@@ -959,12 +959,12 @@ impl Cpu {
     // Clear the whole stack
     fn clr(&mut self, operands: (Operand, Operand)) {
         use Operand::*;
-        // use Register::*;
+        use Register::*;
         match operands {
             // Stack -> Stack
             (Null, Null) => {
-                todo!("Fix the .size() method");
-                // self.write_reg(StackPointer, self.dev_mapper.size() as u64);
+                self.write_reg(StackPointer, self.read_reg(FramePointer));
+                self.write_reg(FrameSize, 0);
             }
             _ => panic!("Invalid operands for clr instruction"),
         }

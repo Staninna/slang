@@ -84,7 +84,7 @@ The Slang VM supports the following opcodes:
 | `POP`  | Pop from top of stack  | 8-bit | `0x42` | `REG`, `NULL` |
 | `DUP`  | Duplicate top of stack | 8-bit | `0x43` | `NULL`        |
 | `SWP`  | Swap top of stack      | 8-bit | `0x44` | `NULL`        |
-| `CLR`  | Clear stack            | 8-bit | `0x45` | `NULL`        |
+| `CLR`  | Clear last stack frame | 8-bit | `0x45` | `NULL`        |
 | `RET`  | Return from subroutine | 8-bit | `0x46` | `NULL`        |
 | `CAL`  | Call subroutine        | 8-bit | `0x47` | `NULL`        |
 
